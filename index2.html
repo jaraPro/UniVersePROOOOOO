@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniVerse Pro - Главная</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #062abb;
+      --secondary: #ff6b6b;
+      --accent: #4ecdc4;
+      --light: #f8f9fa;
+      --dark: #1a1a2e;
+      --ink: #eaf1ff;
+      --panel: rgba(255,255,255,0.06);
+      --panel-border: rgba(255,255,255,0.12);
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--ink);
+      line-height: 1.6;
+      background:
+        radial-gradient(circle at 15% -10%, rgba(140,170,255,0.22) 0%, transparent 35%),
+        radial-gradient(circle at 85% 8%, rgba(153,223,255,0.16) 0%, transparent 35%),
+        #020308;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(1px 1px at 20px 30px, rgba(255,255,255,0.45), transparent),
+        radial-gradient(1px 1px at 110px 80px, rgba(255,255,255,0.3), transparent),
+        radial-gradient(1px 1px at 260px 130px, rgba(255,255,255,0.35), transparent),
+        radial-gradient(1px 1px at 430px 50px, rgba(255,255,255,0.28), transparent);
+      background-size: 520px 240px;
+      opacity: 0.38;
+      z-index: -3;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 42% 28%, transparent 0%, rgba(0,0,0,0.38) 62%, rgba(0,0,0,0.72) 100%);
+      z-index: -2;
+    }
+
+    /* NAVIGATION */
+    .navbar {
+      background: rgba(10, 12, 20, 0.72);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: white;
+      width: 100%;
+      margin: 0;
+      border-radius: 0;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.28);
+    }
+
+    .logo {
+      font-size: 1.15rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo i {
+      color: #cfd6ea;
+      animation: none;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .nav-center {
+      display: flex;
+      flex: 1;
+      gap: 0.55rem;
+      justify-content: center;
+      margin: 0 1rem;
+    }
+
+    .nav-btn {
+      background: rgba(255,255,255,0.04);
+      color: #e8edff;
+      border: 1px solid rgba(255,255,255,0.16);
+      padding: 0.48rem 0.85rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.9);
+      color: #101827;
+    }
+
+    .nav-btn.active-nav-btn {
+      background: rgba(255,255,255,0.9);
+      color: #101827;
+      border-color: rgba(255,255,255,0.95);
+    }
+
+    .page-tabs {
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(6px);
+      padding: 0.7rem 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid rgba(255,255,255,0.25);
+    }
+
+    .page-tab {
+      text-decoration: none;
+      color: white;
+      border: 1px solid rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.08);
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      font-weight: 600;
+      transition: all 0.25s ease;
+    }
+
+    .page-tab:hover {
+      background: white;
+      color: var(--primary);
+    }
+
+    .page-tab.active {
+      background: white;
+      color: var(--primary);
+      border-color: white;
+    }
+
+    .nav-right {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: rgba(255,255,255,0.06);
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.13);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.86);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #111827;
+    }
+
+    /* HERO SECTION */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      color: white;
+      min-height: 76vh;
+      width: 100%;
+      margin: 0;
+      padding: 2.5rem 2rem 1rem;
+      text-align: center;
+      display: flex;
+      align-items: stretch;
+      border-radius: 0;
+      border: none;
+      box-shadow: 0 22px 50px rgba(0,0,0,0.35);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(5, 7, 15, 0.4), rgba(5, 7, 15, 0.52)),
+        url('https://lookakademie.at/wp-content/uploads/2023/09/wirtschaftsuniversita%E2%95%A0yt-wien-min.jpeg'),
+        radial-gradient(circle at 52% 28%, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.02) 28%, transparent 52%),
+        radial-gradient(circle at 58% 35%, rgba(140, 172, 255, 0.2) 0%, transparent 42%),
+        repeating-radial-gradient(circle at 50% 38%, rgba(255,255,255,0.1) 0 1px, transparent 1px 4px),
+        linear-gradient(180deg, #05070f 0%, #070a14 60%, #04060d 100%);
+      background-size: auto, cover, auto, auto, auto, auto;
+      background-position: center, center, center, center, center, center;
+      background-repeat: no-repeat;
+      transform: scale(1.04);
+      filter: brightness(0.9);
+      animation: heroImageOpen 1.4s ease-out forwards;
+      z-index: -2;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.32), rgba(0,0,0,0.18));
+      opacity: 0;
+      animation: heroOverlayIn 1s ease-out 0.2s forwards;
+      z-index: -1;
+    }
+
+    @keyframes heroImageOpen {
+      from {
+        transform: scale(1.2);
+        filter: blur(6px) brightness(0.72);
+      }
+      to {
+        transform: scale(1);
+        filter: blur(0) brightness(0.92);
+      }
+    }
+
+    @keyframes heroOverlayIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes heroTitleEnter {
+      from {
+        opacity: 0;
+        transform: translateX(-90px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+      width: 100%;
+      min-height: calc(80vh - 3.5rem);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 4.8vw, 3.4rem);
+      margin-bottom: 0;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-shadow: 0 4px 16px rgba(0,0,0,0.75);
+      opacity: 0;
+      animation: heroTitleEnter 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.35s forwards;
+    }
+
+    .hero p {
+      font-size: clamp(1.6rem, 3.2vw, 2.6rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 0;
+      opacity: 0;
+      max-width: 980px;
+      margin-inline: auto;
+      text-shadow: 0 4px 16px rgba(0,0,0,0.75);
+      animation: heroTitleEnter 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.55s forwards;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-hero {
+      padding: 1rem 2.5rem;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: white;
+      color: var(--primary);
+    }
+
+    .btn-primary:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+    }
+
+    .btn-secondary:hover {
+      background: white;
+      color: var(--primary);
+    }
+
+    /* FEATURES */
+    .features {
+      max-width: 1200px;
+      margin: 5rem auto;
+      padding: 0 2rem;
+    }
+
+    .features h2 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
+      color: #f2f6ff;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      backdrop-filter: blur(8px);
+      padding: 2rem;
+      border-radius: 15px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 16px 30px rgba(0,0,0,0.22);
+      transition: all 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #dee7ff;
+    }
+
+    .feature-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: #f5f8ff;
+    }
+
+    .feature-card p {
+      color: #b8c5e8;
+      line-height: 1.8;
+    }
+
+    /* STATS */
+    .stats {
+      background: rgba(255,255,255,0.06);
+      color: #f4f7ff;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(8px);
+      padding: 3rem 2rem;
+      margin: 3rem 0;
+    }
+
+    .stats-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      text-align: center;
+    }
+
+    .stat {
+      font-size: 0.9rem;
+    }
+
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 900;
+      display: block;
+    }
+
+    .stat-label {
+      opacity: 0.9;
+    }
+
+    /* CTA */
+    .cta {
+      background: linear-gradient(135deg, var(--primary), #0a4bb8);
+      color: white;
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .cta-content {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .cta h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .cta p {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      opacity: 0.95;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--dark);
+      color: white;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      margin: 1rem 0;
+      font-size: 1.5rem;
+    }
+
+    .social-links a {
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .social-links a:hover {
+      color: #ffd700;
+      transform: scale(1.2);
+    }
+
+    .design-switcher {
+      position: fixed;
+      right: 20px;
+      top: 86px;
+      z-index: 1200;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.5rem;
+    }
+
+    .design-toggle-float {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.65rem 0.95rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(10, 12, 20, 0.78);
+      color: #f2f6ff;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.28);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.88rem;
+      transition: all 0.25s ease;
+    }
+
+    .design-toggle-float:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.92);
+      color: #101827;
+    }
+
+    .design-menu {
+      display: none;
+      min-width: 250px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(10, 12, 20, 0.88);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.32);
+      padding: 0.45rem;
+    }
+
+    .design-menu.open {
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .design-option {
+      width: 100%;
+      text-align: left;
+      border: none;
+      border-radius: 10px;
+      padding: 0.58rem 0.72rem;
+      background: rgba(255,255,255,0.06);
+      color: #eef2ff;
+      cursor: pointer;
+      font-size: 0.86rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .design-option:hover {
+      background: rgba(255,255,255,0.18);
+    }
+
+    .design-option.active {
+      background: rgba(255,255,255,0.92);
+      color: #0f172a;
+    }
+
+    /* OLD DESIGN (MAIN DEFAULT) */
+    body.old-design {
+      color: #333;
+      background: linear-gradient(180deg, #f7f9ff 0%, #eef3ff 100%);
+    }
+
+    body.old-design::before,
+    body.old-design::after {
+      display: none;
+    }
+
+    body.old-design .navbar {
+      background: linear-gradient(90deg, var(--primary) 0%, #0a4bb8 100%);
+      width: calc(100% - 0rem);
+      margin: 0;
+      border-radius: 0;
+      border: none;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      top: 0;
+      padding: 1rem 2rem;
+      backdrop-filter: none;
+    }
+
+    body.old-design .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    body.old-design .logo i {
+      color: #ffffff;
+      animation: pulse 2s infinite;
+    }
+
+    body.dark-design .logo,
+    body.white-design .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    body.dark-design .nav-center,
+    body.white-design .nav-center {
+      gap: 1.5rem;
+      margin: 0 2rem;
+    }
+
+    body.dark-design .nav-btn,
+    body.white-design .nav-btn {
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    body.old-design .nav-center {
+      gap: 1.5rem;
+      margin: 0 2rem;
+    }
+
+    body.old-design .nav-btn {
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: 2px solid transparent;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    body.old-design .nav-btn:hover {
+      background: white;
+      color: var(--primary);
+    }
+
+    body.old-design .nav-btn.active-nav-btn {
+      background: white;
+      color: var(--primary);
+      border-color: white;
+    }
+
+    body.old-design .user-info {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      border-radius: 25px;
+    }
+
+    body.old-design .user-avatar {
+      background: #ffd700;
+      color: var(--primary);
+    }
+
+    body.old-design .hero {
+      min-height: 80vh;
+      width: 100%;
+      margin: 0;
+      border-radius: 0;
+      border: none;
+      box-shadow: none;
+    }
+
+    body.old-design .hero::before {
+      background-image: url('https://lookakademie.at/wp-content/uploads/2023/09/wirtschaftsuniversita%E2%95%A0yt-wien-min.jpeg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: #1f2d3d;
+      transform: scale(1.2);
+      filter: blur(6px) brightness(0.72);
+    }
+
+    body.old-design .hero-content {
+      min-height: calc(80vh - 3.5rem);
+    }
+
+    body.old-design .features h2 {
+      color: var(--primary);
+    }
+
+    body.old-design .feature-card {
+      background: white;
+      border: none;
+      backdrop-filter: none;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    body.old-design .feature-icon {
+      color: var(--primary);
+    }
+
+    body.old-design .feature-card h3 {
+      color: var(--dark);
+    }
+
+    body.old-design .feature-card p {
+      color: #666;
+    }
+
+    body.old-design .stats {
+      background: var(--primary);
+      color: white;
+      border: none;
+      backdrop-filter: none;
+    }
+
+    body.old-design .design-toggle-float {
+      background: var(--primary);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.45);
+      backdrop-filter: none;
+    }
+
+    body.old-design .design-menu {
+      background: rgba(32, 56, 162, 0.92);
+      border-color: rgba(255,255,255,0.35);
+    }
+
+    body.dark-design {
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 15% -10%, rgba(140,170,255,0.22) 0%, transparent 35%),
+        radial-gradient(circle at 85% 8%, rgba(153,223,255,0.16) 0%, transparent 35%),
+        #020308;
+    }
+
+    body.dark-design::before,
+    body.dark-design::after {
+      display: block;
+    }
+
+    body.white-design {
+      color: #333;
+      background: #ffffff;
+    }
+
+    body.white-design::before,
+    body.white-design::after {
+      display: none;
+    }
+
+    body.white-design .navbar {
+      background: #ffffff;
+      color: #111827;
+      border: 1px solid rgba(15,23,42,0.12);
+      box-shadow: 0 8px 18px rgba(15,23,42,0.1);
+      backdrop-filter: none;
+    }
+
+    body.white-design .logo,
+    body.white-design .logo i {
+      color: #111827;
+    }
+
+    body.white-design .nav-btn {
+      color: #111827;
+      background: #eef2f7;
+      border: 1px solid #d7dee9;
+    }
+
+    body.white-design .nav-btn:hover,
+    body.white-design .nav-btn.active-nav-btn {
+      background: #111827;
+      color: #ffffff;
+      border-color: #111827;
+    }
+
+    body.white-design .page-tabs {
+      background: linear-gradient(180deg, #ffffff 0%, #f6f8fc 100%);
+      border-top: 1px solid rgba(15,23,42,0.08);
+      border-bottom: 1px solid rgba(15,23,42,0.12);
+      backdrop-filter: none;
+      box-shadow: 0 6px 16px rgba(15,23,42,0.08);
+    }
+
+    body.white-design .page-tab {
+      color: #1f2937;
+      background: #eef2f7;
+      border: 1px solid #d7dee9;
+      box-shadow: 0 2px 6px rgba(15,23,42,0.06);
+    }
+
+    body.white-design .page-tab:hover {
+      background: #111827;
+      color: #ffffff;
+      border-color: #111827;
+    }
+
+    body.white-design .page-tab.active {
+      background: linear-gradient(135deg, #111827 0%, #374151 100%);
+      color: #ffffff;
+      border-color: #111827;
+    }
+
+    body.white-design .user-info {
+      background: #eef2f7;
+      border: 1px solid #d7dee9;
+    }
+
+    body.white-design .features h2 {
+      color: #111827;
+      text-shadow: none;
+    }
+
+    body.white-design .feature-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      backdrop-filter: none;
+      box-shadow: 0 10px 24px rgba(15,23,42,0.1);
+    }
+
+    body.white-design .feature-icon {
+      color: #1f2937;
+    }
+
+    body.white-design .feature-card h3 {
+      color: #111827;
+    }
+
+    body.white-design .feature-card p {
+      color: #4b5563;
+    }
+
+    body.white-design .stats {
+      background: #ffffff;
+      color: #111827;
+      border-top: 1px solid #e5e7eb;
+      border-bottom: 1px solid #e5e7eb;
+      backdrop-filter: none;
+    }
+
+    body.white-design .design-toggle-float {
+      background: #ffffff;
+      color: #111827;
+      border: 1px solid rgba(15,23,42,0.18);
+      backdrop-filter: none;
+    }
+
+    body.white-design .design-menu {
+      background: #ffffff;
+      border-color: rgba(15,23,42,0.16);
+      backdrop-filter: none;
+      box-shadow: 0 10px 24px rgba(15,23,42,0.16);
+    }
+
+    body.white-design .design-option {
+      background: #f3f4f6;
+      color: #111827;
+    }
+
+    body.white-design .design-option:hover {
+      background: #e5e7eb;
+    }
+
+    body.white-design .design-option.active {
+      background: #111827;
+      color: #ffffff;
+    }
+
+    @media (max-width: 768px) {
+      html,
+      body {
+        min-width: 1200px;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body class="old-design">
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="logo">
+    <i class="fas fa-graduation-cap"></i>
+    UniVerse Pro
+  </div>
+  <div class="nav-center">
+    <button class="nav-btn active-nav-btn" onclick="goHome()">
+      <i class="fas fa-home"></i> Главная
+    </button>
+    <button class="nav-btn" onclick="window.location.href='index5.html'">
+      <i class="fas fa-university"></i> Университеты
+    </button>
+    <button class="nav-btn" onclick="window.location.href='/obshaga/obshaga.html'">
+      <i class="fas fa-building"></i> Общежитие
+    </button>
+    <button class="nav-btn" onclick="goInfo()">
+      <i class="fas fa-info-circle"></i> О нас
+    </button>
+    <button class="nav-btn" onclick="window.location.href='AI.html'">
+      <i class="fas fa-robot"></i> AI-Гид
+    </button>
+  </div>
+  <div class="nav-right">
+    <div class="user-info" onclick="goProfile()" id="userInfo" style="display:none;">
+      <div class="user-avatar" id="userAvatar">U</div>
+      <span id="userName">Пользователь</span>
+      <i class="fas fa-chevron-down"></i>
+    </div>
+    <button class="nav-btn" onclick="openAuthModal()" id="loginBtn">
+      <i class="fas fa-sign-in-alt"></i> Вход/Регистрация
+    </button>
+  </div>
+</nav>
+
+<div class="design-switcher" id="designSwitcher">
+  <button class="design-toggle-float" onclick="toggleDesignMenu(event)" id="designToggleBtn" type="button">
+    <i class="fas fa-palette"></i> Выбор дизайна
+  </button>
+  <div class="design-menu" id="designMenu">
+    <button class="design-option" type="button" data-variant="old" onclick="selectDesignVariant('old')">Главный дизайн</button>
+    <button class="design-option" type="button" data-variant="dark" onclick="selectDesignVariant('dark')">Тёмный</button>
+    <button class="design-option" type="button" data-variant="white" onclick="selectDesignVariant('white')">Белый</button>
+  </div>
+</div>
+
+<!-- HERO SECTION -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>UniVersePRO</h1>
+    <p>Поиск лучших учебных заведений по всему миру в одном месте</p>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <h2>Почему выбирают UniVerse Pro?</h2>
+  <div class="features-grid">
+    <div class="feature-card" onclick="openFeatureCard('index5.html')">
+      <div class="feature-icon">
+        <i class="fas fa-search"></i>
+      </div>
+      <h3>Полный поиск</h3>
+      <p>Продвинутый поиск с фильтрацией по городу, стране, рейтингу и специальности</p>
+    </div>
+
+    <div class="feature-card" onclick="openFeatureCard('index5.html')">
+      <div class="feature-icon">
+        <i class="fas fa-star"></i>
+      </div>
+      <h3>Рейтинги</h3>
+      <p>Настоящие рейтинги университетов основанные на отзывах студентов</p>
+    </div>
+
+    <div class="feature-card" onclick="openFeatureCard('profile.html?tab=favorites')">
+      <div class="feature-icon">
+        <i class="fas fa-heart"></i>
+      </div>
+      <h3>Избранное</h3>
+      <p>Сохраняйте интересующие вас университеты и следите за их обновлениями</p>
+    </div>
+
+    <div class="feature-card" onclick="openFeatureCard('sravnenie.html')">
+      <div class="feature-icon">
+        <i class="fas fa-cube"></i>
+      </div>
+      <h3>Сравнение</h3>
+      <p>Сравнивайте несколько университетов одновременно чтобы принять лучшее решение</p>
+    </div>
+
+    <div class="feature-card" onclick="openFeatureCard('obshaga/obshaga.html')">
+      <div class="feature-icon">
+        <i class="fas fa-building"></i>
+      </div>
+      <h3>Общежитие</h3>
+      <p>Информация о вариантах размещения и общежитиях при каждом университете</p>
+    </div>
+
+    <div class="feature-card" onclick="openFeatureCard('profile.html')">
+      <div class="feature-icon">
+        <i class="fas fa-user-circle"></i>
+      </div>
+      <h3>Личный кабинет</h3>
+      <p>Управляйте несколькими аккаунтами и синхронизируйте данные между устройствами</p>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="stats-content">
+    <div class="stat">
+      <span class="stat-number">500+</span>
+      <span class="stat-label">Университетов</span>
+    </div>
+    <div class="stat">
+      <span class="stat-number">50+</span>
+      <span class="stat-label">Стран</span>
+    </div>
+    <div class="stat">
+      <span class="stat-number">100K+</span>
+      <span class="stat-label">Пользователей</span>
+    </div>
+    <div class="stat">
+      <span class="stat-number">4.9★</span>
+    </div>
+  </div>
+</section>
+
+<script src="auth.js"></script>
+<script>
+function applySavedDesignVariant() {
+  const variant = localStorage.getItem('universe_index2_design_variant') || 'old';
+  const body = document.body;
+  const button = document.getElementById('designToggleBtn');
+  const menu = document.getElementById('designMenu');
+
+  body.classList.remove('old-design', 'dark-design', 'white-design');
+  if (variant === 'white') {
+    body.classList.add('white-design');
+  } else if (variant === 'dark') {
+    body.classList.add('dark-design');
+  } else {
+    body.classList.add('old-design');
+  }
+
+  if (button) {
+    const label = variant === 'white'
+      ? 'Белый дизайн'
+      : (variant === 'dark' ? 'Тёмный дизайн' : 'Главный дизайн');
+    button.innerHTML = `<i class="fas fa-palette"></i> ${label}`;
+  }
+
+  document.querySelectorAll('.design-option').forEach((option) => {
+    option.classList.toggle('active', option.dataset.variant === variant);
+  });
+
+  if (menu) {
+    menu.classList.remove('open');
+  }
+}
+
+function toggleDesignMenu(event) {
+  if (event) {
+    event.stopPropagation();
+  }
+  const menu = document.getElementById('designMenu');
+  if (!menu) return;
+  menu.classList.toggle('open');
+}
+
+function selectDesignVariant(variant) {
+  localStorage.setItem('universe_index2_design_variant', variant);
+  applySavedDesignVariant();
+}
+
+document.addEventListener('click', (event) => {
+  const switcher = document.getElementById('designSwitcher');
+  const menu = document.getElementById('designMenu');
+  if (!switcher || !menu) return;
+  if (!switcher.contains(event.target)) {
+    menu.classList.remove('open');
+  }
+});
+
+// Проверить аутентификацию при загрузке
+window.onload = () => {
+  applySavedDesignVariant();
+  const user = localStorage.getItem('universe_currentUser');
+  if (user) {
+    const userData = JSON.parse(user);
+    document.getElementById('userInfo').style.display = 'flex';
+    document.getElementById('loginBtn').style.display = 'none';
+    document.getElementById('userName').textContent = userData.name || 'Пользователь';
+    const initials = (userData.name || 'U').split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    document.getElementById('userAvatar').textContent = initials;
+  }
+
+  const params = new URLSearchParams(window.location.search || '');
+  const authTab = params.get('auth');
+  if ((authTab === 'login' || authTab === 'register') && window.universeAuth) {
+    window.universeAuth.openModal();
+    const tabIndex = authTab === 'register' ? 1 : 0;
+    const tabButtons = document.querySelectorAll('#universeAuthModal .universe-auth-tab');
+    if (tabButtons[tabIndex]) {
+      tabButtons[tabIndex].click();
+    }
+  }
+};
+
+function openAuthModal() {
+  if (window.universeAuth && typeof window.universeAuth.openModal === 'function') {
+    window.universeAuth.openModal();
+  } else {
+    window.location.href = 'index2.html?auth=login';
+  }
+}
+
+function goHome() {
+  window.location.href = 'index2.html';
+}
+
+function goInfo() {
+  window.location.href = 'info.html';
+}
+
+function goProfile() {
+  window.location.href = 'profile.html';
+}
+
+function goToSearch() {
+  window.location.href = 'index5.html';
+}
+
+function goToProfile() {
+  window.location.href = 'profile.html';
+}
+
+function goToInfo() {
+  window.location.href = 'info.html';
+}
+
+function openFeatureCard(targetUrl) {
+  if (!targetUrl) {
+    return;
+  }
+  window.location.href = targetUrl;
+}
+
+function logout() {
+  localStorage.removeItem('universe_currentUser');
+  location.reload();
+}
+
+// PWA and Push Notifications
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then((registration) => {
+        console.log('SW registered: ', registration);
+
+        // Request notification permission
+        if ('Notification' in window) {
+          Notification.requestPermission().then((permission) => {
+            if (permission === 'granted') {
+              console.log('Notification permission granted');
+            }
+          });
+        }
+      })
+      .catch((registrationError) => {
+        console.log('SW registration failed: ', registrationError);
+      });
+  });
+}
+
+// Install prompt
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+
+  // Show install button or banner
+  const installBanner = document.createElement('div');
+  installBanner.id = 'install-banner';
+  installBanner.innerHTML = `
+    <div style="position: fixed; bottom: 20px; left: 20px; right: 20px; background: var(--primary); color: white; padding: 1rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 1000; display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <strong>Установить UniVerse Pro</strong><br>
+        <small>Работает как приложение на вашем устройстве</small>
+      </div>
+      <div>
+        <button onclick="installPWA()" style="background: white; color: var(--primary); border: none; padding: 0.5rem 1rem; border-radius: 5px; margin-right: 0.5rem; cursor: pointer;">Установить</button>
+        <button onclick="dismissInstall()" style="background: transparent; color: white; border: 1px solid white; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">Позже</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(installBanner);
+
+  // Auto-hide after 10 seconds
+  setTimeout(() => {
+    const banner = document.getElementById('install-banner');
+    if (banner) banner.remove();
+  }, 10000);
+});
+
+function installPWA() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted the install prompt');
+      }
+      deferredPrompt = null;
+      document.getElementById('install-banner').remove();
+    });
+  }
+}
+
+function dismissInstall() {
+  document.getElementById('install-banner').remove();
+}
+</script>
+
+</body>
+</html>
