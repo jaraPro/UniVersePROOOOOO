@@ -1,0 +1,1010 @@
+<!doctype html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>UniVerse Pro - AI-Гид</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<style>
+		:root {
+			--bg: #f5f7fb;
+			--panel: #ffffff;
+			--text: #17212f;
+			--muted: #64748b;
+			--accent: #0b5bd3;
+			--accent-soft: #dbeafe;
+			--line: #e2e8f0;
+			--user: #dbeafe;
+			--bot: #eff6ff;
+			--danger: #b91c1c;
+			--chat-bg: #f8fbff;
+			--input-bg: #ffffff;
+			--head-bg: linear-gradient(120deg, #eff6ff 0%, #f8fafc 100%);
+			--nav-bg: rgba(10, 12, 20, 0.72);
+			--nav-border: rgba(255, 255, 255, 0.12);
+			--nav-btn-bg: rgba(255, 255, 255, 0.04);
+			--nav-btn-text: #e8edff;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			font-family: "Segoe UI", "Noto Sans", sans-serif;
+			background:
+				radial-gradient(circle at 10% 8%, rgba(96, 165, 250, 0.2), transparent 30%),
+				radial-gradient(circle at 85% 12%, rgba(147, 197, 253, 0.16), transparent 34%),
+				radial-gradient(circle at 50% 100%, rgba(191, 219, 254, 0.18), transparent 45%),
+				var(--bg);
+			color: var(--text);
+			min-height: 100vh;
+		}
+
+		body.old-design {
+			--bg: #eef3ff;
+			--panel: #ffffff;
+			--text: #17212f;
+			--muted: #52607a;
+			--line: #d6e3ff;
+			--chat-bg: #f8fbff;
+			--input-bg: #ffffff;
+			--head-bg: linear-gradient(120deg, #eaf2ff 0%, #f8fbff 100%);
+			--nav-bg: linear-gradient(90deg, #062abb 0%, #0a4bb8 100%);
+			--nav-border: rgba(255, 255, 255, 0.22);
+			--nav-btn-bg: rgba(255, 255, 255, 0.1);
+			--nav-btn-text: #ffffff;
+		}
+
+		body.dark-design {
+			--bg: #050914;
+			--panel: #0d1527;
+			--text: #edf2ff;
+			--muted: #9fb1d5;
+			--line: #263551;
+			--accent: #60a5fa;
+			--accent-soft: #172848;
+			--user: #1a3159;
+			--bot: #14233f;
+			--chat-bg: #0a1222;
+			--input-bg: #0e1930;
+			--head-bg: linear-gradient(120deg, #12203b 0%, #0f1930 100%);
+			--nav-bg: rgba(10, 12, 20, 0.88);
+			--nav-border: rgba(255, 255, 255, 0.18);
+			--nav-btn-bg: rgba(255, 255, 255, 0.08);
+			--nav-btn-text: #e8edff;
+		}
+
+		body.white-design {
+			--bg: #ffffff;
+			--panel: #ffffff;
+			--text: #111827;
+			--muted: #4b5563;
+			--line: #dbe3ee;
+			--chat-bg: #f9fbff;
+			--input-bg: #ffffff;
+			--head-bg: linear-gradient(120deg, #f3f7ff 0%, #ffffff 100%);
+			--nav-bg: #ffffff;
+			--nav-border: rgba(15, 23, 42, 0.14);
+			--nav-btn-bg: #eef2f7;
+			--nav-btn-text: #111827;
+		}
+
+		.navbar {
+			background: var(--nav-bg);
+			backdrop-filter: blur(12px);
+			border: 1px solid var(--nav-border);
+			color: white;
+			width: 100%;
+			margin: 0;
+			border-radius: 0;
+			padding: 1rem 2rem;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			position: sticky;
+			top: 0;
+			z-index: 100;
+			box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+		}
+
+		.logo {
+			font-size: 1.15rem;
+			font-weight: 600;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+
+		.logo i {
+			color: #cfd6ea;
+			animation: none;
+		}
+
+		.nav-center {
+			display: flex;
+			flex: 1;
+			gap: 0.55rem;
+			justify-content: center;
+			margin: 0 1rem;
+		}
+
+		.nav-btn {
+			background: var(--nav-btn-bg);
+			color: var(--nav-btn-text);
+			border: 1px solid rgba(255, 255, 255, 0.16);
+			padding: 0.48rem 0.85rem;
+			border-radius: 999px;
+			cursor: pointer;
+			transition: all 0.3s;
+			font-size: 0.85rem;
+			font-weight: 600;
+		}
+
+		.nav-btn:hover {
+			background: rgba(255, 255, 255, 0.9);
+			color: #101827;
+		}
+
+		.nav-btn.active-nav-btn {
+			background: rgba(255, 255, 255, 0.9);
+			color: #101827;
+			border-color: rgba(255, 255, 255, 0.95);
+		}
+
+		body.dark-design .nav-btn.active-nav-btn,
+		body.old-design .nav-btn.active-nav-btn {
+			background: #ffffff;
+			color: #0f172a;
+		}
+
+		.nav-right {
+			display: flex;
+			gap: 1rem;
+			align-items: center;
+		}
+
+		.user-info {
+			display: flex;
+			align-items: center;
+			gap: 0.8rem;
+			background: rgba(255, 255, 255, 0.06);
+			padding: 0.5rem 1rem;
+			border-radius: 999px;
+			border: 1px solid rgba(255, 255, 255, 0.13);
+			cursor: pointer;
+			transition: all 0.3s;
+		}
+
+		.user-avatar {
+			width: 32px;
+			height: 32px;
+			border-radius: 50%;
+			background: rgba(255, 255, 255, 0.86);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-weight: bold;
+			color: #111827;
+		}
+
+		.page-shell {
+			padding: 20px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.ai-wrap {
+			width: min(940px, 100%);
+			height: min(86vh, 760px);
+			background: var(--panel);
+			border: 1px solid var(--line);
+			border-radius: 22px;
+			box-shadow: 0 24px 70px rgba(15, 23, 42, 0.18);
+			display: grid;
+			grid-template-rows: auto auto 1fr auto;
+			overflow: hidden;
+			position: relative;
+		}
+
+		.head {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 12px;
+			padding: 18px 20px;
+			border-bottom: 1px solid var(--line);
+			background: var(--head-bg);
+		}
+
+		.title {
+			margin: 0;
+			font-size: 1.15rem;
+			font-weight: 600;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+
+		.title i {
+			color: #cfd6ea;
+		}
+
+		.subtitle {
+			margin: 3px 0 0;
+			font-size: 0.92rem;
+			color: var(--muted);
+		}
+
+		.status {
+			font-size: 0.82rem;
+			color: var(--muted);
+			text-align: right;
+		}
+
+		.quick {
+			padding: 12px 16px;
+			border-bottom: 1px solid var(--line);
+			display: flex;
+			gap: 8px;
+			overflow-x: auto;
+			background: var(--panel);
+		}
+
+		.quick button {
+			border: 1px solid var(--line);
+			background: var(--input-bg);
+			color: var(--text);
+			border-radius: 999px;
+			padding: 8px 12px;
+			font-size: 0.85rem;
+			cursor: pointer;
+			white-space: nowrap;
+		}
+
+		.quick button:hover {
+			border-color: var(--accent);
+			color: var(--accent);
+		}
+
+		.chat {
+			padding: 18px;
+			overflow: auto;
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+			background: var(--chat-bg);
+			scroll-behavior: smooth;
+		}
+
+		.msg {
+			max-width: 78%;
+			border: 1px solid var(--line);
+			border-radius: 15px;
+			padding: 11px 13px;
+			line-height: 1.45;
+			white-space: pre-wrap;
+			word-wrap: break-word;
+			animation: message-in 0.22s ease-out;
+			box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+		}
+
+		.msg.user {
+			align-self: flex-end;
+			background: var(--user);
+		}
+
+		.msg.bot {
+			align-self: flex-start;
+			background: var(--bot);
+		}
+
+		.msg.error {
+			border-color: #fecaca;
+			background: #fef2f2;
+			color: var(--danger);
+		}
+
+		.typing {
+			align-self: flex-start;
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			border: 1px solid var(--line);
+			background: var(--bot);
+			border-radius: 999px;
+			padding: 10px 14px;
+			box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+			animation: message-in 0.22s ease-out;
+		}
+
+		.typing span {
+			width: 7px;
+			height: 7px;
+			border-radius: 50%;
+			background: color-mix(in oklab, var(--accent) 72%, white 28%);
+			animation: dot-pulse 1s infinite ease-in-out;
+		}
+
+		.typing span:nth-child(2) {
+			animation-delay: 0.15s;
+		}
+
+		.typing span:nth-child(3) {
+			animation-delay: 0.3s;
+		}
+
+		.university-card {
+			align-self: flex-start;
+			border: 1px solid var(--line);
+			border-radius: 16px;
+			background: var(--accent-soft);
+			padding: 14px;
+			display: grid;
+			gap: 10px;
+			max-width: 78%;
+			animation: message-in 0.22s ease-out;
+			box-shadow: 0 10px 20px rgba(15, 23, 42, 0.1);
+		}
+
+		.university-card strong {
+			font-size: 0.96rem;
+			line-height: 1.35;
+		}
+
+		.university-card a {
+			display: inline-block;
+			text-decoration: none;
+			border-radius: 11px;
+			background: var(--accent);
+			color: #fff;
+			padding: 8px 12px;
+			font-weight: 600;
+			width: fit-content;
+			transition: transform 0.2s ease, box-shadow 0.2s ease;
+		}
+
+		.university-card a:hover {
+			transform: translateY(-1px);
+			box-shadow: 0 10px 18px rgba(11, 91, 211, 0.28);
+		}
+
+		form {
+			border-top: 1px solid var(--line);
+			padding: 12px;
+			display: grid;
+			grid-template-columns: 1fr auto;
+			gap: 8px;
+			background: var(--panel);
+		}
+
+		textarea {
+			width: 100%;
+			resize: none;
+			border: 1px solid var(--line);
+			background: var(--input-bg);
+			color: var(--text);
+			border-radius: 12px;
+			min-height: 50px;
+			max-height: 180px;
+			padding: 12px;
+			font: inherit;
+			line-height: 1.4;
+			outline: none;
+		}
+
+		textarea:focus {
+			border-color: var(--accent);
+			box-shadow: 0 0 0 3px rgba(11, 91, 211, 0.18);
+		}
+
+		.send {
+			border: none;
+			border-radius: 12px;
+			background: var(--accent);
+			color: #fff;
+			min-width: 126px;
+			padding: 0 16px;
+			font-size: 0.95rem;
+			font-weight: 600;
+			cursor: pointer;
+			transition: transform 0.2s ease, box-shadow 0.2s ease;
+		}
+
+		.send:hover:not(:disabled) {
+			transform: translateY(-1px);
+			box-shadow: 0 12px 22px rgba(11, 91, 211, 0.28);
+		}
+
+		.send:disabled {
+			opacity: 0.6;
+			cursor: wait;
+		}
+
+		body.dark-design .ai-wrap {
+			box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
+		}
+
+		body.dark-design .msg {
+			color: #eaf1ff;
+		}
+
+		body.dark-design .msg.bot {
+			background: #132543 !important;
+			border-color: #2d446a !important;
+		}
+
+		body.dark-design .status {
+			color: #b9c8e7;
+		}
+
+		body.dark-design .subtitle {
+			color: #c9d7f2;
+		}
+
+		body.dark-design .quick button:hover {
+			border-color: #7fb2ff;
+			color: #cfe2ff;
+		}
+
+		body.dark-design .msg,
+		body.dark-design .typing,
+		body.dark-design .university-card {
+			box-shadow: 0 12px 24px rgba(0, 0, 0, 0.26);
+		}
+
+		body.old-design .navbar {
+			background: linear-gradient(90deg, #062abb 0%, #0a4bb8 100%) !important;
+		}
+
+		@keyframes message-in {
+			from {
+				opacity: 0;
+				transform: translateY(8px) scale(0.98);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0) scale(1);
+			}
+		}
+
+		@keyframes dot-pulse {
+			0%, 100% {
+				transform: translateY(0);
+				opacity: 0.55;
+			}
+			50% {
+				transform: translateY(-3px);
+				opacity: 1;
+			}
+		}
+
+		@media (max-width: 700px) {
+			.navbar {
+				min-width: 1200px;
+			}
+
+			.page-shell {
+				padding: 0;
+			}
+
+			.ai-wrap {
+				width: 100%;
+				height: 100vh;
+				border-radius: 0;
+			}
+
+			.msg,
+			.university-card {
+				max-width: 92%;
+			}
+
+			.send {
+				min-width: 92px;
+			}
+		}
+	</style>
+</head>
+<body>
+	<nav class="navbar">
+		<div class="logo">
+			<i class="fas fa-graduation-cap"></i>
+			UniVerse Pro
+		</div>
+		<div class="nav-center">
+			<button class="nav-btn" onclick="goHome()">
+				<i class="fas fa-home"></i> Главная
+			</button>
+			<button class="nav-btn" onclick="goToSearch()">
+				<i class="fas fa-university"></i> Университеты
+			</button>
+			<button class="nav-btn" onclick="goToDormitory()">
+				<i class="fas fa-building"></i> Общежитие
+			</button>
+			<button class="nav-btn" onclick="goInfo()">
+				<i class="fas fa-info-circle"></i> О нас
+			</button>
+			<button class="nav-btn active-nav-btn" type="button">
+				<i class="fas fa-robot"></i> AI-Гид
+			</button>
+		</div>
+		<div class="nav-right">
+			<div class="user-info" onclick="goProfile()" id="userInfo" style="display:none;">
+				<div class="user-avatar" id="userAvatar">U</div>
+				<span id="userName">Пользователь</span>
+				<i class="fas fa-chevron-down"></i>
+			</div>
+			<button class="nav-btn" onclick="openAuthModal()" id="loginBtn">
+				<i class="fas fa-sign-in-alt"></i> Вход/Регистрация
+			</button>
+		</div>
+	</nav>
+
+	<div class="page-shell">
+	<main class="ai-wrap">
+		<header class="head">
+			<div>
+				<h1 class="title"><i class="fas fa-graduation-cap"></i> UniVerse Pro AI-Гид</h1>
+				<p class="subtitle">Профконсультант по выбору вуза, поступлению и документам</p>
+			</div>
+			<div id="status" class="status">Готов к диалогу</div>
+		</header>
+
+		<section class="quick" aria-label="Быстрые вопросы">
+			<button type="button" data-q="Помоги выбрать университет под мой бюджет и специальность">Подобрать вуз</button>
+			<button type="button" data-q="Сделай план поступления на 6 месяцев">План поступления</button>
+			<button type="button" data-q="Какие документы обычно нужны для поступления?">Документы</button>
+			<button type="button" data-q="Зайди в университет КазНУ">Открыть КазНУ</button>
+		</section>
+
+		<section id="chat" class="chat" aria-live="polite"></section>
+
+		<form id="chatForm">
+			<textarea id="message" placeholder="Напиши вопрос... Например: зайди в университет AITU" required></textarea>
+			<button class="send" id="sendBtn" type="submit">Отправить</button>
+		</form>
+	</main>
+	</div>
+
+	<script>
+		(function syncUserUI() {
+			const raw = localStorage.getItem('universe_currentUser');
+			if (!raw) {
+				return;
+			}
+
+			try {
+				const userData = JSON.parse(raw);
+				if (!userData || typeof userData !== 'object') {
+					return;
+				}
+
+				document.getElementById('userInfo').style.display = 'flex';
+				document.getElementById('loginBtn').style.display = 'none';
+				document.getElementById('userName').textContent = userData.name || 'Пользователь';
+				const initials = (userData.name || 'U').split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2);
+				document.getElementById('userAvatar').textContent = initials;
+			} catch (error) {
+				console.warn('Не удалось прочитать данные пользователя', error);
+			}
+		})();
+
+		function openAuthModal() {
+			if (window.universeAuth && typeof window.universeAuth.openModal === 'function') {
+				window.universeAuth.openModal();
+			} else {
+				window.location.href = 'index2.html?auth=login';
+			}
+		}
+
+		function goHome() {
+			window.location.href = 'index2.html';
+		}
+
+		function goInfo() {
+			window.location.href = 'info.html';
+		}
+
+		function goProfile() {
+			window.location.href = 'profile.html';
+		}
+
+		function goToSearch() {
+			window.location.href = 'index5.html';
+		}
+
+		function goToDormitory() {
+			window.location.href = 'obshaga/obshaga.html';
+		}
+
+		const chatEl = document.getElementById('chat');
+		const statusEl = document.getElementById('status');
+		const formEl = document.getElementById('chatForm');
+		const messageEl = document.getElementById('message');
+		const sendBtnEl = document.getElementById('sendBtn');
+		const params = new URLSearchParams(window.location.search);
+
+		function normalizeUniversityHref(rawHref) {
+			const raw = String(rawHref || '').trim();
+			if (!raw) {
+				return '';
+			}
+
+			let cleaned = raw;
+			try {
+				if (/^https?:\/\//i.test(raw)) {
+					cleaned = new URL(raw).pathname;
+				}
+			} catch (error) {
+				cleaned = raw;
+			}
+
+			const univerIdx = cleaned.toLowerCase().indexOf('/univer/');
+			if (univerIdx >= 0) {
+				cleaned = cleaned.slice(univerIdx + 1);
+			}
+
+			return cleaned.replace(/^\/+/, '');
+		}
+
+		function hrefLooksLikeUniversityPage(href) {
+			return /^univer\/.+\.html$/i.test(String(href || '').trim());
+		}
+
+		function buildUniversityTitleFromHref(href) {
+			const parts = String(href || '').split('/');
+			const fileName = decodeURIComponent(parts[parts.length - 1] || '')
+				.replace(/\.html$/i, '')
+				.replace(/[\-_]+/g, ' ')
+				.trim();
+			return fileName || 'Университет';
+		}
+
+		function toNavigableHref(href) {
+			const value = String(href || '').trim();
+			if (!value) {
+				return '#';
+			}
+			if (/^(https?:)?\/\//i.test(value)) {
+				return value;
+			}
+			return value.replace(/^\/+/, '');
+		}
+
+		const selectedUniversityHrefFromQuery = normalizeUniversityHref(params.get('university'));
+
+		const history = [];
+		let lastMatchedUniversity = null;
+		let pageUniversityContext = null;
+		let typingIndicatorEl = null;
+		let remoteAiEnabled = window.location.protocol !== 'file:';
+		let hasShownLocalModeNotice = false;
+
+		const localUniversityCatalog = [
+			{ title: 'КазНУ', href: 'univer/kazakhstan/Almaty/kaznu.html', aliases: ['казну', 'kaznu', 'аль-фараби', 'al-farabi'] },
+			{ title: 'KIMEP', href: 'univer/kazakhstan/Almaty/Kimep.html', aliases: ['kimep', 'кимеп'] },
+			{ title: 'AITU', href: 'univer/kazakhstan/Astana/aitu.html', aliases: ['aitu', 'аиту', 'astana it'] },
+			{ title: 'SDU', href: 'univer/kazakhstan/Almaty/sdu.html', aliases: ['sdu', 'сду', 'suleyman demirel'] },
+			{ title: 'ENU', href: 'univer/kazakhstan/Astana/enu.html', aliases: ['enu', 'ену', 'гумилев'] },
+			{ title: 'NU', href: 'univer/kazakhstan/Astana/nu.html', aliases: ['nu', 'nazarbayev university', 'назарбаев'] },
+			{ title: 'Satbayev University', href: 'univer/kazakhstan/Almaty/satbayev.html', aliases: ['satbayev', 'сатпаев'] },
+			{ title: 'KazATU', href: 'univer/kazakhstan/Astana/kazatu.html', aliases: ['kazatu', 'казату'] },
+			{ title: 'KazNPU', href: 'univer/kazakhstan/Almaty/KazNPY.html', aliases: ['kaznpu', 'казнпу', 'абая'] },
+			{ title: 'KazNAU', href: 'univer/kazakhstan/Almaty/KazNAU.html', aliases: ['kaznau', 'казнау'] },
+		];
+
+		function normalizeText(value) {
+			return String(value || '')
+				.toLowerCase()
+				.replace(/ё/g, 'е')
+				.replace(/[^\p{L}\p{N}\s]/gu, ' ')
+				.replace(/\s+/g, ' ')
+				.trim();
+		}
+
+		function findLocalUniversityMatch(text) {
+			const normalized = normalizeText(text);
+			if (!normalized) {
+				return null;
+			}
+
+			for (const uni of localUniversityCatalog) {
+				const aliases = [uni.title].concat(Array.isArray(uni.aliases) ? uni.aliases : []);
+				if (aliases.some((alias) => normalized.includes(normalizeText(alias)))) {
+					return { title: uni.title, href: toNavigableHref(uni.href) };
+				}
+			}
+
+			return null;
+		}
+
+		function isOpenUniversityIntent(text) {
+			const normalized = normalizeText(text);
+			return /\b(зайди|открой|перейди|перейти|open|go to)\b/.test(normalized);
+		}
+
+		function getLocalAssistantReply(userText) {
+			const normalized = normalizeText(userText);
+			const matchedUniversity = findLocalUniversityMatch(normalized);
+			const openIntent = isOpenUniversityIntent(normalized);
+
+			if (openIntent && matchedUniversity) {
+				return {
+					reply: `Нашёл ${matchedUniversity.title}. Открываю страницу университета.`,
+					matchedUniversity,
+					action: { type: 'navigate-university', university: matchedUniversity },
+				};
+			}
+
+			if (/\b(документ|справк|аттестат|ielts|toefl|мотивац|recommend|рекомендац)\b/.test(normalized)) {
+				return {
+					reply:
+						'Обычно нужны: аттестат/диплом с приложением, удостоверение личности/паспорт, фото, мотивационное письмо, иногда 1-2 рекомендации, сертификат английского (если программа на английском) и медицинские формы. Хочешь, сделаю чеклист под конкретный вуз?',
+					matchedUniversity,
+				};
+			}
+
+			if (/\b(план|6 месяц|поступлен|roadmap|дедлайн)\b/.test(normalized)) {
+				return {
+					reply:
+						'План на 6 месяцев: 1) выбрать 3-5 вузов и программы; 2) собрать документы и переводы; 3) подготовить IELTS/внутренние экзамены; 4) отправить заявки и оплатить application fee; 5) пройти интервью/тесты; 6) получить оффер, подтвердить грант/оплату и оформить зачисление.',
+					matchedUniversity,
+				};
+			}
+
+			if (/\b(бюджет|стоим|дешев|грант|скидк|scholarship)\b/.test(normalized)) {
+				return {
+					reply:
+						'Чтобы подобрать вуз по бюджету, напиши: город, направление, максимальную стоимость в год и нужен ли грант. Пример: Алматы, IT, до 1.5 млн тг/год, грант обязателен.',
+					matchedUniversity,
+				};
+			}
+
+			if (matchedUniversity) {
+				return {
+					reply: `Нашёл ${matchedUniversity.title}. Могу подсказать требования для поступления или сразу открыть страницу вуза.`,
+					matchedUniversity,
+				};
+			}
+
+			return {
+				reply:
+					'Я работаю в автономном режиме без серверного AI. Могу: подобрать вуз по бюджету, сделать пошаговый план поступления, дать список документов и открыть страницу университета по команде "зайди в университет ...".',
+			};
+		}
+
+		function applyAssistantPayload(data) {
+			const reply = data.reply || 'Не удалось сформировать ответ';
+			addMessage('assistant', reply);
+			history.push({ role: 'assistant', content: reply });
+
+			if (data.matchedUniversity) {
+				addUniversityCard(data.matchedUniversity);
+			}
+
+			if (data.action?.type === 'navigate-university' && data.action.university?.href) {
+				navigateToUniversity(data.action.university);
+			}
+		}
+
+		function scrollChatToBottom() {
+			chatEl.scrollTop = chatEl.scrollHeight;
+		}
+
+		function addMessage(role, text, isError = false) {
+			hideTypingIndicator();
+			const div = document.createElement('div');
+			div.className = `msg ${role === 'user' ? 'user' : 'bot'}${isError ? ' error' : ''}`;
+			div.textContent = text;
+			chatEl.appendChild(div);
+			scrollChatToBottom();
+		}
+
+		function addUniversityCard(match) {
+			if (!match || !match.href) {
+				return;
+			}
+
+			lastMatchedUniversity = {
+				title: String(match.title || 'Университет'),
+				href: toNavigableHref(match.href),
+			};
+
+			const card = document.createElement('div');
+			card.className = 'university-card';
+
+			const title = document.createElement('strong');
+			title.textContent = `Найден вуз: ${match.title || 'Университет'}`;
+
+			const link = document.createElement('a');
+			link.href = toNavigableHref(match.href);
+			link.textContent = 'Перейти на страницу университета';
+
+			card.appendChild(title);
+			card.appendChild(link);
+			chatEl.appendChild(card);
+			scrollChatToBottom();
+		}
+
+		function navigateToUniversity(match) {
+			if (!match || !match.href) {
+				return;
+			}
+
+			statusEl.textContent = `Открываю страницу: ${match.title || 'университет'}...`;
+			window.setTimeout(() => {
+				window.location.href = toNavigableHref(match.href);
+			}, 900);
+		}
+
+		function showTypingIndicator() {
+			if (typingIndicatorEl) {
+				return;
+			}
+
+			typingIndicatorEl = document.createElement('div');
+			typingIndicatorEl.className = 'typing';
+			typingIndicatorEl.innerHTML = '<span></span><span></span><span></span>';
+			chatEl.appendChild(typingIndicatorEl);
+			scrollChatToBottom();
+		}
+
+		function hideTypingIndicator() {
+			if (!typingIndicatorEl) {
+				return;
+			}
+
+			typingIndicatorEl.remove();
+			typingIndicatorEl = null;
+		}
+
+		function setPending(isPending) {
+			sendBtnEl.disabled = isPending;
+			messageEl.disabled = isPending;
+			statusEl.textContent = isPending ? 'ИИ-гид печатает...' : 'Готов к диалогу';
+			if (isPending) {
+				showTypingIndicator();
+			} else {
+				hideTypingIndicator();
+			}
+		}
+
+		async function loadUniversityContextByQuery() {
+			if (!selectedUniversityHrefFromQuery || !hrefLooksLikeUniversityPage(selectedUniversityHrefFromQuery)) {
+				return;
+			}
+
+			statusEl.textContent = 'Загружаю контекст университета...';
+
+			if (!remoteAiEnabled) {
+				pageUniversityContext = {
+					title: buildUniversityTitleFromHref(selectedUniversityHrefFromQuery),
+					href: selectedUniversityHrefFromQuery,
+				};
+				addUniversityCard(pageUniversityContext);
+				addMessage(
+					'assistant',
+					`Открыт контекст: ${pageUniversityContext.title}. Работаю в автономном режиме: подскажу по документам, срокам и шагам поступления.`
+				);
+				statusEl.textContent = 'Готов к диалогу';
+				return;
+			}
+
+			try {
+				const response = await fetch(`/api/universities/context?href=${encodeURIComponent('/' + selectedUniversityHrefFromQuery)}`);
+				const data = await response.json();
+
+				if (!response.ok) {
+					throw new Error(data.error || 'Не удалось загрузить контекст университета');
+				}
+
+				pageUniversityContext = data.context || null;
+				if (pageUniversityContext?.title && pageUniversityContext?.href) {
+					addUniversityCard({
+						title: pageUniversityContext.title,
+						href: pageUniversityContext.href,
+					});
+					addMessage(
+						'assistant',
+						`Открыт контекст: ${pageUniversityContext.title}. Можешь спросить, что есть в университете, какие документы нужны и как поступать шаг за шагом.`
+					);
+				}
+			} catch (error) {
+				remoteAiEnabled = false;
+				pageUniversityContext = {
+					title: buildUniversityTitleFromHref(selectedUniversityHrefFromQuery),
+					href: selectedUniversityHrefFromQuery,
+				};
+				addUniversityCard(pageUniversityContext);
+				addMessage(
+					'assistant',
+					`Серверный контекст недоступен, поэтому включён автономный режим. Базовый контекст: ${pageUniversityContext.title}.`
+				);
+			} finally {
+				statusEl.textContent = 'Готов к диалогу';
+			}
+		}
+
+		async function sendMessage(text) {
+			const userText = String(text || '').trim();
+			if (!userText) {
+				return;
+			}
+
+			addMessage('user', userText);
+			history.push({ role: 'user', content: userText });
+			setPending(true);
+
+			try {
+				if (remoteAiEnabled) {
+					const contextParts = ['Пользователь общается на отдельной странице AI.html'];
+					if (pageUniversityContext?.title) {
+						contextParts.push(`Текущий университет: ${pageUniversityContext.title}`);
+					}
+
+					const response = await fetch('/api/ai-guide/chat', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({
+							message: userText,
+							history: history.slice(-8),
+							context: contextParts.join(' | '),
+							selectedUniversity: lastMatchedUniversity,
+						}),
+					});
+
+					const data = await response.json();
+					if (!response.ok) {
+						throw new Error(data.error || 'Ошибка ответа сервера');
+					}
+					applyAssistantPayload(data);
+				} else {
+					const localData = getLocalAssistantReply(userText);
+					applyAssistantPayload(localData);
+				}
+			} catch (error) {
+				remoteAiEnabled = false;
+				if (!hasShownLocalModeNotice) {
+					hasShownLocalModeNotice = true;
+					addMessage('assistant', 'Серверный AI недоступен, поэтому я переключился в автономный режим на этой странице.');
+				}
+				const localData = getLocalAssistantReply(userText);
+				applyAssistantPayload(localData);
+			} finally {
+				setPending(false);
+			}
+		}
+
+		formEl.addEventListener('submit', async (event) => {
+			event.preventDefault();
+			const text = messageEl.value;
+			messageEl.value = '';
+			await sendMessage(text);
+			messageEl.focus();
+		});
+
+		messageEl.addEventListener('keydown', (event) => {
+			if (event.key === 'Enter' && !event.shiftKey) {
+				event.preventDefault();
+				formEl.requestSubmit();
+			}
+		});
+
+		document.querySelectorAll('.quick button').forEach((button) => {
+			button.addEventListener('click', async () => {
+				await sendMessage(button.dataset.q || '');
+			});
+		});
+
+		addMessage('assistant', 'Привет! Я ИИ-гид UniVerse Pro. Помогу выбрать университет и подскажу стратегию поступления.');
+		loadUniversityContextByQuery();
+	</script>
+	<script src="design-switcher-index2.js"></script>
+</body>
+</html>
