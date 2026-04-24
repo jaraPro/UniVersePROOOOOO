@@ -1,541 +1,588 @@
-import * as C from './constant';
-import en from './locale/en';
-import U from './utils';
-var L = 'en'; // global locale
+'use strict';
 
-var Ls = {}; // global loaded locale
-
-Ls[L] = en;
-var IS_DAYJS = '$isDayjsObject'; // eslint-disable-next-line no-use-before-define
-
-var isDayjs = function isDayjs(d) {
-  return d instanceof Dayjs || !!(d && d[IS_DAYJS]);
-};
-
-var parseLocale = function parseLocale(preset, object, isLocal) {
-  var l;
-  if (!preset) return L;
-
-  if (typeof preset === 'string') {
-    var presetLower = preset.toLowerCase();
-
-    if (Ls[presetLower]) {
-      l = presetLower;
-    }
-
-    if (object) {
-      Ls[presetLower] = object;
-      l = presetLower;
-    }
-
-    var presetSplit = preset.split('-');
-
-    if (!l && presetSplit.length > 1) {
-      return parseLocale(presetSplit[0]);
-    }
-  } else {
-    var name = preset.name;
-    Ls[name] = preset;
-    l = name;
-  }
-
-  if (!isLocal && l) L = l;
-  return l || !isLocal && L;
-};
-
-var dayjs = function dayjs(date, c) {
-  if (isDayjs(date)) {
-    return date.clone();
-  } // eslint-disable-next-line no-nested-ternary
-
-
-  var cfg = typeof c === 'object' ? c : {};
-  cfg.date = date;
-  cfg.args = arguments; // eslint-disable-line prefer-rest-params
-
-  return new Dayjs(cfg); // eslint-disable-line no-use-before-define
-};
-
-var wrapper = function wrapper(date, instance) {
-  return dayjs(date, {
-    locale: instance.$L,
-    utc: instance.$u,
-    x: instance.$x,
-    $offset: instance.$offset // todo: refactor; do not use this.$offset in you code
-
-  });
-};
-
-var Utils = U; // for plugin use
-
-Utils.l = parseLocale;
-Utils.i = isDayjs;
-Utils.w = wrapper;
-
-var parseDate = function parseDate(cfg) {
-  var date = cfg.date,
-      utc = cfg.utc;
-  if (date === null) return new Date(NaN); // null is invalid
-
-  if (Utils.u(date)) return new Date(); // today
-
-  if (date instanceof Date) return new Date(date);
-
-  if (typeof date === 'string' && !/Z$/i.test(date)) {
-    var d = date.match(C.REGEX_PARSE);
-
-    if (d) {
-      var m = d[2] - 1 || 0;
-      var ms = (d[7] || '0').substring(0, 3);
-
-      if (utc) {
-        return new Date(Date.UTC(d[1], m, d[3] || 1, d[4] || 0, d[5] || 0, d[6] || 0, ms));
-      }
-
-      return new Date(d[1], m, d[3] || 1, d[4] || 0, d[5] || 0, d[6] || 0, ms);
-    }
-  }
-
-  return new Date(date); // everything else
-};
-
-var Dayjs = /*#__PURE__*/function () {
-  function Dayjs(cfg) {
-    this.$L = parseLocale(cfg.locale, null, true);
-    this.parse(cfg); // for plugin
-
-    this.$x = this.$x || cfg.x || {};
-    this[IS_DAYJS] = true;
-  }
-
-  var _proto = Dayjs.prototype;
-
-  _proto.parse = function parse(cfg) {
-    this.$d = parseDate(cfg);
-    this.init();
-  };
-
-  _proto.init = function init() {
-    var $d = this.$d;
-    this.$y = $d.getFullYear();
-    this.$M = $d.getMonth();
-    this.$D = $d.getDate();
-    this.$W = $d.getDay();
-    this.$H = $d.getHours();
-    this.$m = $d.getMinutes();
-    this.$s = $d.getSeconds();
-    this.$ms = $d.getMilliseconds();
-  } // eslint-disable-next-line class-methods-use-this
-  ;
-
-  _proto.$utils = function $utils() {
-    return Utils;
-  };
-
-  _proto.isValid = function isValid() {
-    return !(this.$d.toString() === C.INVALID_DATE_STRING);
-  };
-
-  _proto.isSame = function isSame(that, units) {
-    var other = dayjs(that);
-    return this.startOf(units) <= other && other <= this.endOf(units);
-  };
-
-  _proto.isAfter = function isAfter(that, units) {
-    return dayjs(that) < this.startOf(units);
-  };
-
-  _proto.isBefore = function isBefore(that, units) {
-    return this.endOf(units) < dayjs(that);
-  };
-
-  _proto.$g = function $g(input, get, set) {
-    if (Utils.u(input)) return this[get];
-    return this.set(set, input);
-  };
-
-  _proto.unix = function unix() {
-    return Math.floor(this.valueOf() / 1000);
-  };
-
-  _proto.valueOf = function valueOf() {
-    // timezone(hour) * 60 * 60 * 1000 => ms
-    return this.$d.getTime();
-  };
-
-  _proto.startOf = function startOf(units, _startOf) {
-    var _this = this;
-
-    // startOf -> endOf
-    var isStartOf = !Utils.u(_startOf) ? _startOf : true;
-    var unit = Utils.p(units);
-
-    var instanceFactory = function instanceFactory(d, m) {
-      var ins = Utils.w(_this.$u ? Date.UTC(_this.$y, m, d) : new Date(_this.$y, m, d), _this);
-      return isStartOf ? ins : ins.endOf(C.D);
-    };
-
-    var instanceFactorySet = function instanceFactorySet(method, slice) {
-      var argumentStart = [0, 0, 0, 0];
-      var argumentEnd = [23, 59, 59, 999];
-      return Utils.w(_this.toDate()[method].apply( // eslint-disable-line prefer-spread
-      _this.toDate('s'), (isStartOf ? argumentStart : argumentEnd).slice(slice)), _this);
-    };
-
-    var $W = this.$W,
-        $M = this.$M,
-        $D = this.$D;
-    var utcPad = "set" + (this.$u ? 'UTC' : '');
-
-    switch (unit) {
-      case C.Y:
-        return isStartOf ? instanceFactory(1, 0) : instanceFactory(31, 11);
-
-      case C.M:
-        return isStartOf ? instanceFactory(1, $M) : instanceFactory(0, $M + 1);
-
-      case C.W:
-        {
-          var weekStart = this.$locale().weekStart || 0;
-          var gap = ($W < weekStart ? $W + 7 : $W) - weekStart;
-          return instanceFactory(isStartOf ? $D - gap : $D + (6 - gap), $M);
-        }
-
-      case C.D:
-      case C.DATE:
-        return instanceFactorySet(utcPad + "Hours", 0);
-
-      case C.H:
-        return instanceFactorySet(utcPad + "Minutes", 1);
-
-      case C.MIN:
-        return instanceFactorySet(utcPad + "Seconds", 2);
-
-      case C.S:
-        return instanceFactorySet(utcPad + "Milliseconds", 3);
-
-      default:
-        return this.clone();
-    }
-  };
-
-  _proto.endOf = function endOf(arg) {
-    return this.startOf(arg, false);
-  };
-
-  _proto.$set = function $set(units, _int) {
-    var _C$D$C$DATE$C$M$C$Y$C;
-
-    // private set
-    var unit = Utils.p(units);
-    var utcPad = "set" + (this.$u ? 'UTC' : '');
-    var name = (_C$D$C$DATE$C$M$C$Y$C = {}, _C$D$C$DATE$C$M$C$Y$C[C.D] = utcPad + "Date", _C$D$C$DATE$C$M$C$Y$C[C.DATE] = utcPad + "Date", _C$D$C$DATE$C$M$C$Y$C[C.M] = utcPad + "Month", _C$D$C$DATE$C$M$C$Y$C[C.Y] = utcPad + "FullYear", _C$D$C$DATE$C$M$C$Y$C[C.H] = utcPad + "Hours", _C$D$C$DATE$C$M$C$Y$C[C.MIN] = utcPad + "Minutes", _C$D$C$DATE$C$M$C$Y$C[C.S] = utcPad + "Seconds", _C$D$C$DATE$C$M$C$Y$C[C.MS] = utcPad + "Milliseconds", _C$D$C$DATE$C$M$C$Y$C)[unit];
-    var arg = unit === C.D ? this.$D + (_int - this.$W) : _int;
-
-    if (unit === C.M || unit === C.Y) {
-      // clone is for badMutable plugin
-      var date = this.clone().set(C.DATE, 1);
-      date.$d[name](arg);
-      date.init();
-      this.$d = date.set(C.DATE, Math.min(this.$D, date.daysInMonth())).$d;
-    } else if (name) this.$d[name](arg);
-
-    this.init();
-    return this;
-  };
-
-  _proto.set = function set(string, _int2) {
-    return this.clone().$set(string, _int2);
-  };
-
-  _proto.get = function get(unit) {
-    return this[Utils.p(unit)]();
-  };
-
-  _proto.add = function add(number, units) {
-    var _this2 = this,
-        _C$MIN$C$H$C$S$unit;
-
-    number = Number(number); // eslint-disable-line no-param-reassign
-
-    var unit = Utils.p(units);
-
-    var instanceFactorySet = function instanceFactorySet(n) {
-      var d = dayjs(_this2);
-      return Utils.w(d.date(d.date() + Math.round(n * number)), _this2);
-    };
-
-    if (unit === C.M) {
-      return this.set(C.M, this.$M + number);
-    }
-
-    if (unit === C.Y) {
-      return this.set(C.Y, this.$y + number);
-    }
-
-    if (unit === C.D) {
-      return instanceFactorySet(1);
-    }
-
-    if (unit === C.W) {
-      return instanceFactorySet(7);
-    }
-
-    var step = (_C$MIN$C$H$C$S$unit = {}, _C$MIN$C$H$C$S$unit[C.MIN] = C.MILLISECONDS_A_MINUTE, _C$MIN$C$H$C$S$unit[C.H] = C.MILLISECONDS_A_HOUR, _C$MIN$C$H$C$S$unit[C.S] = C.MILLISECONDS_A_SECOND, _C$MIN$C$H$C$S$unit)[unit] || 1; // ms
-
-    var nextTimeStamp = this.$d.getTime() + number * step;
-    return Utils.w(nextTimeStamp, this);
-  };
-
-  _proto.subtract = function subtract(number, string) {
-    return this.add(number * -1, string);
-  };
-
-  _proto.format = function format(formatStr) {
-    var _this3 = this;
-
-    var locale = this.$locale();
-    if (!this.isValid()) return locale.invalidDate || C.INVALID_DATE_STRING;
-    var str = formatStr || C.FORMAT_DEFAULT;
-    var zoneStr = Utils.z(this);
-    var $H = this.$H,
-        $m = this.$m,
-        $M = this.$M;
-    var weekdays = locale.weekdays,
-        months = locale.months,
-        meridiem = locale.meridiem;
-
-    var getShort = function getShort(arr, index, full, length) {
-      return arr && (arr[index] || arr(_this3, str)) || full[index].slice(0, length);
-    };
-
-    var get$H = function get$H(num) {
-      return Utils.s($H % 12 || 12, num, '0');
-    };
-
-    var meridiemFunc = meridiem || function (hour, minute, isLowercase) {
-      var m = hour < 12 ? 'AM' : 'PM';
-      return isLowercase ? m.toLowerCase() : m;
-    };
-
-    var matches = function matches(match) {
-      switch (match) {
-        case 'YY':
-          return String(_this3.$y).slice(-2);
-
-        case 'YYYY':
-          return Utils.s(_this3.$y, 4, '0');
-
-        case 'M':
-          return $M + 1;
-
-        case 'MM':
-          return Utils.s($M + 1, 2, '0');
-
-        case 'MMM':
-          return getShort(locale.monthsShort, $M, months, 3);
-
-        case 'MMMM':
-          return getShort(months, $M);
-
-        case 'D':
-          return _this3.$D;
-
-        case 'DD':
-          return Utils.s(_this3.$D, 2, '0');
-
-        case 'd':
-          return String(_this3.$W);
-
-        case 'dd':
-          return getShort(locale.weekdaysMin, _this3.$W, weekdays, 2);
-
-        case 'ddd':
-          return getShort(locale.weekdaysShort, _this3.$W, weekdays, 3);
-
-        case 'dddd':
-          return weekdays[_this3.$W];
-
-        case 'H':
-          return String($H);
-
-        case 'HH':
-          return Utils.s($H, 2, '0');
-
-        case 'h':
-          return get$H(1);
-
-        case 'hh':
-          return get$H(2);
-
-        case 'a':
-          return meridiemFunc($H, $m, true);
-
-        case 'A':
-          return meridiemFunc($H, $m, false);
-
-        case 'm':
-          return String($m);
-
-        case 'mm':
-          return Utils.s($m, 2, '0');
-
-        case 's':
-          return String(_this3.$s);
-
-        case 'ss':
-          return Utils.s(_this3.$s, 2, '0');
-
-        case 'SSS':
-          return Utils.s(_this3.$ms, 3, '0');
-
-        case 'Z':
-          return zoneStr;
-        // 'ZZ' logic below
-
-        default:
-          break;
-      }
-
-      return null;
-    };
-
-    return str.replace(C.REGEX_FORMAT, function (match, $1) {
-      return $1 || matches(match) || zoneStr.replace(':', '');
-    }); // 'ZZ'
-  };
-
-  _proto.utcOffset = function utcOffset() {
-    // Because a bug at FF24, we're rounding the timezone offset around 15 minutes
-    // https://github.com/moment/moment/pull/1871
-    return -Math.round(this.$d.getTimezoneOffset() / 15) * 15;
-  };
-
-  _proto.diff = function diff(input, units, _float) {
-    var _this4 = this;
-
-    var unit = Utils.p(units);
-    var that = dayjs(input);
-    var zoneDelta = (that.utcOffset() - this.utcOffset()) * C.MILLISECONDS_A_MINUTE;
-    var diff = this - that;
-
-    var getMonth = function getMonth() {
-      return Utils.m(_this4, that);
-    };
-
-    var result;
-
-    switch (unit) {
-      case C.Y:
-        result = getMonth() / 12;
-        break;
-
-      case C.M:
-        result = getMonth();
-        break;
-
-      case C.Q:
-        result = getMonth() / 3;
-        break;
-
-      case C.W:
-        result = (diff - zoneDelta) / C.MILLISECONDS_A_WEEK;
-        break;
-
-      case C.D:
-        result = (diff - zoneDelta) / C.MILLISECONDS_A_DAY;
-        break;
-
-      case C.H:
-        result = diff / C.MILLISECONDS_A_HOUR;
-        break;
-
-      case C.MIN:
-        result = diff / C.MILLISECONDS_A_MINUTE;
-        break;
-
-      case C.S:
-        result = diff / C.MILLISECONDS_A_SECOND;
-        break;
-
-      default:
-        result = diff; // milliseconds
-
-        break;
-    }
-
-    return _float ? result : Utils.a(result);
-  };
-
-  _proto.daysInMonth = function daysInMonth() {
-    return this.endOf(C.M).$D;
-  };
-
-  _proto.$locale = function $locale() {
-    // get locale object
-    return Ls[this.$L];
-  };
-
-  _proto.locale = function locale(preset, object) {
-    if (!preset) return this.$L;
-    var that = this.clone();
-    var nextLocaleName = parseLocale(preset, object, true);
-    if (nextLocaleName) that.$L = nextLocaleName;
-    return that;
-  };
-
-  _proto.clone = function clone() {
-    return Utils.w(this.$d, this);
-  };
-
-  _proto.toDate = function toDate() {
-    return new Date(this.valueOf());
-  };
-
-  _proto.toJSON = function toJSON() {
-    return this.isValid() ? this.toISOString() : null;
-  };
-
-  _proto.toISOString = function toISOString() {
-    // ie 8 return
-    // new Dayjs(this.valueOf() + this.$d.getTimezoneOffset() * 60000)
-    // .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
-    return this.$d.toISOString();
-  };
-
-  _proto.toString = function toString() {
-    return this.$d.toUTCString();
-  };
-
-  return Dayjs;
-}();
-
-var proto = Dayjs.prototype;
-dayjs.prototype = proto;
-[['$ms', C.MS], ['$s', C.S], ['$m', C.MIN], ['$H', C.H], ['$W', C.D], ['$M', C.M], ['$y', C.Y], ['$D', C.DATE]].forEach(function (g) {
-  proto[g[1]] = function (input) {
-    return this.$g(input, g[0], g[1]);
-  };
+Object.defineProperty(exports, "__esModule", {
+    value: true
 });
+exports.doDuring = exports.during = exports.wrapSync = undefined;
+exports.selectSeries = exports.selectLimit = exports.select = exports.foldr = exports.foldl = exports.inject = exports.forEachOfLimit = exports.forEachOfSeries = exports.forEachOf = exports.forEachLimit = exports.forEachSeries = exports.forEach = exports.flatMapSeries = exports.flatMapLimit = exports.flatMap = exports.findSeries = exports.findLimit = exports.find = exports.anySeries = exports.anyLimit = exports.any = exports.allSeries = exports.allLimit = exports.all = exports.whilst = exports.waterfall = exports.until = exports.unmemoize = exports.tryEach = exports.transform = exports.timesSeries = exports.timesLimit = exports.times = exports.timeout = exports.sortBy = exports.someSeries = exports.someLimit = exports.some = exports.setImmediate = exports.series = exports.seq = exports.retryable = exports.retry = exports.rejectSeries = exports.rejectLimit = exports.reject = exports.reflectAll = exports.reflect = exports.reduceRight = exports.reduce = exports.race = exports.queue = exports.priorityQueue = exports.parallelLimit = exports.parallel = exports.nextTick = exports.memoize = exports.mapValuesSeries = exports.mapValuesLimit = exports.mapValues = exports.mapSeries = exports.mapLimit = exports.map = exports.log = exports.groupBySeries = exports.groupByLimit = exports.groupBy = exports.forever = exports.filterSeries = exports.filterLimit = exports.filter = exports.everySeries = exports.everyLimit = exports.every = exports.ensureAsync = exports.eachSeries = exports.eachOfSeries = exports.eachOfLimit = exports.eachOf = exports.eachLimit = exports.each = exports.doWhilst = exports.doUntil = exports.dir = exports.detectSeries = exports.detectLimit = exports.detect = exports.constant = exports.concatSeries = exports.concatLimit = exports.concat = exports.compose = exports.cargoQueue = exports.cargo = exports.autoInject = exports.auto = exports.asyncify = exports.applyEachSeries = exports.applyEach = exports.apply = undefined;
 
-dayjs.extend = function (plugin, option) {
-  if (!plugin.$i) {
-    // install plugin only once
-    plugin(option, Dayjs, dayjs);
-    plugin.$i = true;
-  }
+var _apply = require('./apply');
 
-  return dayjs;
+var _apply2 = _interopRequireDefault(_apply);
+
+var _applyEach = require('./applyEach');
+
+var _applyEach2 = _interopRequireDefault(_applyEach);
+
+var _applyEachSeries = require('./applyEachSeries');
+
+var _applyEachSeries2 = _interopRequireDefault(_applyEachSeries);
+
+var _asyncify = require('./asyncify');
+
+var _asyncify2 = _interopRequireDefault(_asyncify);
+
+var _auto = require('./auto');
+
+var _auto2 = _interopRequireDefault(_auto);
+
+var _autoInject = require('./autoInject');
+
+var _autoInject2 = _interopRequireDefault(_autoInject);
+
+var _cargo = require('./cargo');
+
+var _cargo2 = _interopRequireDefault(_cargo);
+
+var _cargoQueue = require('./cargoQueue');
+
+var _cargoQueue2 = _interopRequireDefault(_cargoQueue);
+
+var _compose = require('./compose');
+
+var _compose2 = _interopRequireDefault(_compose);
+
+var _concat = require('./concat');
+
+var _concat2 = _interopRequireDefault(_concat);
+
+var _concatLimit = require('./concatLimit');
+
+var _concatLimit2 = _interopRequireDefault(_concatLimit);
+
+var _concatSeries = require('./concatSeries');
+
+var _concatSeries2 = _interopRequireDefault(_concatSeries);
+
+var _constant = require('./constant');
+
+var _constant2 = _interopRequireDefault(_constant);
+
+var _detect = require('./detect');
+
+var _detect2 = _interopRequireDefault(_detect);
+
+var _detectLimit = require('./detectLimit');
+
+var _detectLimit2 = _interopRequireDefault(_detectLimit);
+
+var _detectSeries = require('./detectSeries');
+
+var _detectSeries2 = _interopRequireDefault(_detectSeries);
+
+var _dir = require('./dir');
+
+var _dir2 = _interopRequireDefault(_dir);
+
+var _doUntil = require('./doUntil');
+
+var _doUntil2 = _interopRequireDefault(_doUntil);
+
+var _doWhilst = require('./doWhilst');
+
+var _doWhilst2 = _interopRequireDefault(_doWhilst);
+
+var _each = require('./each');
+
+var _each2 = _interopRequireDefault(_each);
+
+var _eachLimit = require('./eachLimit');
+
+var _eachLimit2 = _interopRequireDefault(_eachLimit);
+
+var _eachOf = require('./eachOf');
+
+var _eachOf2 = _interopRequireDefault(_eachOf);
+
+var _eachOfLimit = require('./eachOfLimit');
+
+var _eachOfLimit2 = _interopRequireDefault(_eachOfLimit);
+
+var _eachOfSeries = require('./eachOfSeries');
+
+var _eachOfSeries2 = _interopRequireDefault(_eachOfSeries);
+
+var _eachSeries = require('./eachSeries');
+
+var _eachSeries2 = _interopRequireDefault(_eachSeries);
+
+var _ensureAsync = require('./ensureAsync');
+
+var _ensureAsync2 = _interopRequireDefault(_ensureAsync);
+
+var _every = require('./every');
+
+var _every2 = _interopRequireDefault(_every);
+
+var _everyLimit = require('./everyLimit');
+
+var _everyLimit2 = _interopRequireDefault(_everyLimit);
+
+var _everySeries = require('./everySeries');
+
+var _everySeries2 = _interopRequireDefault(_everySeries);
+
+var _filter = require('./filter');
+
+var _filter2 = _interopRequireDefault(_filter);
+
+var _filterLimit = require('./filterLimit');
+
+var _filterLimit2 = _interopRequireDefault(_filterLimit);
+
+var _filterSeries = require('./filterSeries');
+
+var _filterSeries2 = _interopRequireDefault(_filterSeries);
+
+var _forever = require('./forever');
+
+var _forever2 = _interopRequireDefault(_forever);
+
+var _groupBy = require('./groupBy');
+
+var _groupBy2 = _interopRequireDefault(_groupBy);
+
+var _groupByLimit = require('./groupByLimit');
+
+var _groupByLimit2 = _interopRequireDefault(_groupByLimit);
+
+var _groupBySeries = require('./groupBySeries');
+
+var _groupBySeries2 = _interopRequireDefault(_groupBySeries);
+
+var _log = require('./log');
+
+var _log2 = _interopRequireDefault(_log);
+
+var _map = require('./map');
+
+var _map2 = _interopRequireDefault(_map);
+
+var _mapLimit = require('./mapLimit');
+
+var _mapLimit2 = _interopRequireDefault(_mapLimit);
+
+var _mapSeries = require('./mapSeries');
+
+var _mapSeries2 = _interopRequireDefault(_mapSeries);
+
+var _mapValues = require('./mapValues');
+
+var _mapValues2 = _interopRequireDefault(_mapValues);
+
+var _mapValuesLimit = require('./mapValuesLimit');
+
+var _mapValuesLimit2 = _interopRequireDefault(_mapValuesLimit);
+
+var _mapValuesSeries = require('./mapValuesSeries');
+
+var _mapValuesSeries2 = _interopRequireDefault(_mapValuesSeries);
+
+var _memoize = require('./memoize');
+
+var _memoize2 = _interopRequireDefault(_memoize);
+
+var _nextTick = require('./nextTick');
+
+var _nextTick2 = _interopRequireDefault(_nextTick);
+
+var _parallel = require('./parallel');
+
+var _parallel2 = _interopRequireDefault(_parallel);
+
+var _parallelLimit = require('./parallelLimit');
+
+var _parallelLimit2 = _interopRequireDefault(_parallelLimit);
+
+var _priorityQueue = require('./priorityQueue');
+
+var _priorityQueue2 = _interopRequireDefault(_priorityQueue);
+
+var _queue = require('./queue');
+
+var _queue2 = _interopRequireDefault(_queue);
+
+var _race = require('./race');
+
+var _race2 = _interopRequireDefault(_race);
+
+var _reduce = require('./reduce');
+
+var _reduce2 = _interopRequireDefault(_reduce);
+
+var _reduceRight = require('./reduceRight');
+
+var _reduceRight2 = _interopRequireDefault(_reduceRight);
+
+var _reflect = require('./reflect');
+
+var _reflect2 = _interopRequireDefault(_reflect);
+
+var _reflectAll = require('./reflectAll');
+
+var _reflectAll2 = _interopRequireDefault(_reflectAll);
+
+var _reject = require('./reject');
+
+var _reject2 = _interopRequireDefault(_reject);
+
+var _rejectLimit = require('./rejectLimit');
+
+var _rejectLimit2 = _interopRequireDefault(_rejectLimit);
+
+var _rejectSeries = require('./rejectSeries');
+
+var _rejectSeries2 = _interopRequireDefault(_rejectSeries);
+
+var _retry = require('./retry');
+
+var _retry2 = _interopRequireDefault(_retry);
+
+var _retryable = require('./retryable');
+
+var _retryable2 = _interopRequireDefault(_retryable);
+
+var _seq = require('./seq');
+
+var _seq2 = _interopRequireDefault(_seq);
+
+var _series = require('./series');
+
+var _series2 = _interopRequireDefault(_series);
+
+var _setImmediate = require('./setImmediate');
+
+var _setImmediate2 = _interopRequireDefault(_setImmediate);
+
+var _some = require('./some');
+
+var _some2 = _interopRequireDefault(_some);
+
+var _someLimit = require('./someLimit');
+
+var _someLimit2 = _interopRequireDefault(_someLimit);
+
+var _someSeries = require('./someSeries');
+
+var _someSeries2 = _interopRequireDefault(_someSeries);
+
+var _sortBy = require('./sortBy');
+
+var _sortBy2 = _interopRequireDefault(_sortBy);
+
+var _timeout = require('./timeout');
+
+var _timeout2 = _interopRequireDefault(_timeout);
+
+var _times = require('./times');
+
+var _times2 = _interopRequireDefault(_times);
+
+var _timesLimit = require('./timesLimit');
+
+var _timesLimit2 = _interopRequireDefault(_timesLimit);
+
+var _timesSeries = require('./timesSeries');
+
+var _timesSeries2 = _interopRequireDefault(_timesSeries);
+
+var _transform = require('./transform');
+
+var _transform2 = _interopRequireDefault(_transform);
+
+var _tryEach = require('./tryEach');
+
+var _tryEach2 = _interopRequireDefault(_tryEach);
+
+var _unmemoize = require('./unmemoize');
+
+var _unmemoize2 = _interopRequireDefault(_unmemoize);
+
+var _until = require('./until');
+
+var _until2 = _interopRequireDefault(_until);
+
+var _waterfall = require('./waterfall');
+
+var _waterfall2 = _interopRequireDefault(_waterfall);
+
+var _whilst = require('./whilst');
+
+var _whilst2 = _interopRequireDefault(_whilst);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * An "async function" in the context of Async is an asynchronous function with
+ * a variable number of parameters, with the final parameter being a callback.
+ * (`function (arg1, arg2, ..., callback) {}`)
+ * The final callback is of the form `callback(err, results...)`, which must be
+ * called once the function is completed.  The callback should be called with a
+ * Error as its first argument to signal that an error occurred.
+ * Otherwise, if no error occurred, it should be called with `null` as the first
+ * argument, and any additional `result` arguments that may apply, to signal
+ * successful completion.
+ * The callback must be called exactly once, ideally on a later tick of the
+ * JavaScript event loop.
+ *
+ * This type of function is also referred to as a "Node-style async function",
+ * or a "continuation passing-style function" (CPS). Most of the methods of this
+ * library are themselves CPS/Node-style async functions, or functions that
+ * return CPS/Node-style async functions.
+ *
+ * Wherever we accept a Node-style async function, we also directly accept an
+ * [ES2017 `async` function]{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function}.
+ * In this case, the `async` function will not be passed a final callback
+ * argument, and any thrown error will be used as the `err` argument of the
+ * implicit callback, and the return value will be used as the `result` value.
+ * (i.e. a `rejected` of the returned Promise becomes the `err` callback
+ * argument, and a `resolved` value becomes the `result`.)
+ *
+ * Note, due to JavaScript limitations, we can only detect native `async`
+ * functions and not transpilied implementations.
+ * Your environment must have `async`/`await` support for this to work.
+ * (e.g. Node > v7.6, or a recent version of a modern browser).
+ * If you are using `async` functions through a transpiler (e.g. Babel), you
+ * must still wrap the function with [asyncify]{@link module:Utils.asyncify},
+ * because the `async function` will be compiled to an ordinary function that
+ * returns a promise.
+ *
+ * @typedef {Function} AsyncFunction
+ * @static
+ */
+
+/**
+ * Async is a utility module which provides straight-forward, powerful functions
+ * for working with asynchronous JavaScript. Although originally designed for
+ * use with [Node.js](http://nodejs.org) and installable via
+ * `npm install --save async`, it can also be used directly in the browser.
+ * @module async
+ * @see AsyncFunction
+ */
+
+/**
+ * A collection of `async` functions for manipulating collections, such as
+ * arrays and objects.
+ * @module Collections
+ */
+
+/**
+ * A collection of `async` functions for controlling the flow through a script.
+ * @module ControlFlow
+ */
+
+/**
+ * A collection of `async` utility functions.
+ * @module Utils
+ */
+
+exports.default = {
+    apply: _apply2.default,
+    applyEach: _applyEach2.default,
+    applyEachSeries: _applyEachSeries2.default,
+    asyncify: _asyncify2.default,
+    auto: _auto2.default,
+    autoInject: _autoInject2.default,
+    cargo: _cargo2.default,
+    cargoQueue: _cargoQueue2.default,
+    compose: _compose2.default,
+    concat: _concat2.default,
+    concatLimit: _concatLimit2.default,
+    concatSeries: _concatSeries2.default,
+    constant: _constant2.default,
+    detect: _detect2.default,
+    detectLimit: _detectLimit2.default,
+    detectSeries: _detectSeries2.default,
+    dir: _dir2.default,
+    doUntil: _doUntil2.default,
+    doWhilst: _doWhilst2.default,
+    each: _each2.default,
+    eachLimit: _eachLimit2.default,
+    eachOf: _eachOf2.default,
+    eachOfLimit: _eachOfLimit2.default,
+    eachOfSeries: _eachOfSeries2.default,
+    eachSeries: _eachSeries2.default,
+    ensureAsync: _ensureAsync2.default,
+    every: _every2.default,
+    everyLimit: _everyLimit2.default,
+    everySeries: _everySeries2.default,
+    filter: _filter2.default,
+    filterLimit: _filterLimit2.default,
+    filterSeries: _filterSeries2.default,
+    forever: _forever2.default,
+    groupBy: _groupBy2.default,
+    groupByLimit: _groupByLimit2.default,
+    groupBySeries: _groupBySeries2.default,
+    log: _log2.default,
+    map: _map2.default,
+    mapLimit: _mapLimit2.default,
+    mapSeries: _mapSeries2.default,
+    mapValues: _mapValues2.default,
+    mapValuesLimit: _mapValuesLimit2.default,
+    mapValuesSeries: _mapValuesSeries2.default,
+    memoize: _memoize2.default,
+    nextTick: _nextTick2.default,
+    parallel: _parallel2.default,
+    parallelLimit: _parallelLimit2.default,
+    priorityQueue: _priorityQueue2.default,
+    queue: _queue2.default,
+    race: _race2.default,
+    reduce: _reduce2.default,
+    reduceRight: _reduceRight2.default,
+    reflect: _reflect2.default,
+    reflectAll: _reflectAll2.default,
+    reject: _reject2.default,
+    rejectLimit: _rejectLimit2.default,
+    rejectSeries: _rejectSeries2.default,
+    retry: _retry2.default,
+    retryable: _retryable2.default,
+    seq: _seq2.default,
+    series: _series2.default,
+    setImmediate: _setImmediate2.default,
+    some: _some2.default,
+    someLimit: _someLimit2.default,
+    someSeries: _someSeries2.default,
+    sortBy: _sortBy2.default,
+    timeout: _timeout2.default,
+    times: _times2.default,
+    timesLimit: _timesLimit2.default,
+    timesSeries: _timesSeries2.default,
+    transform: _transform2.default,
+    tryEach: _tryEach2.default,
+    unmemoize: _unmemoize2.default,
+    until: _until2.default,
+    waterfall: _waterfall2.default,
+    whilst: _whilst2.default,
+
+    // aliases
+    all: _every2.default,
+    allLimit: _everyLimit2.default,
+    allSeries: _everySeries2.default,
+    any: _some2.default,
+    anyLimit: _someLimit2.default,
+    anySeries: _someSeries2.default,
+    find: _detect2.default,
+    findLimit: _detectLimit2.default,
+    findSeries: _detectSeries2.default,
+    flatMap: _concat2.default,
+    flatMapLimit: _concatLimit2.default,
+    flatMapSeries: _concatSeries2.default,
+    forEach: _each2.default,
+    forEachSeries: _eachSeries2.default,
+    forEachLimit: _eachLimit2.default,
+    forEachOf: _eachOf2.default,
+    forEachOfSeries: _eachOfSeries2.default,
+    forEachOfLimit: _eachOfLimit2.default,
+    inject: _reduce2.default,
+    foldl: _reduce2.default,
+    foldr: _reduceRight2.default,
+    select: _filter2.default,
+    selectLimit: _filterLimit2.default,
+    selectSeries: _filterSeries2.default,
+    wrapSync: _asyncify2.default,
+    during: _whilst2.default,
+    doDuring: _doWhilst2.default
 };
-
-dayjs.locale = parseLocale;
-dayjs.isDayjs = isDayjs;
-
-dayjs.unix = function (timestamp) {
-  return dayjs(timestamp * 1e3);
-};
-
-dayjs.en = Ls[L];
-dayjs.Ls = Ls;
-dayjs.p = {};
-export default dayjs;
+exports.apply = _apply2.default;
+exports.applyEach = _applyEach2.default;
+exports.applyEachSeries = _applyEachSeries2.default;
+exports.asyncify = _asyncify2.default;
+exports.auto = _auto2.default;
+exports.autoInject = _autoInject2.default;
+exports.cargo = _cargo2.default;
+exports.cargoQueue = _cargoQueue2.default;
+exports.compose = _compose2.default;
+exports.concat = _concat2.default;
+exports.concatLimit = _concatLimit2.default;
+exports.concatSeries = _concatSeries2.default;
+exports.constant = _constant2.default;
+exports.detect = _detect2.default;
+exports.detectLimit = _detectLimit2.default;
+exports.detectSeries = _detectSeries2.default;
+exports.dir = _dir2.default;
+exports.doUntil = _doUntil2.default;
+exports.doWhilst = _doWhilst2.default;
+exports.each = _each2.default;
+exports.eachLimit = _eachLimit2.default;
+exports.eachOf = _eachOf2.default;
+exports.eachOfLimit = _eachOfLimit2.default;
+exports.eachOfSeries = _eachOfSeries2.default;
+exports.eachSeries = _eachSeries2.default;
+exports.ensureAsync = _ensureAsync2.default;
+exports.every = _every2.default;
+exports.everyLimit = _everyLimit2.default;
+exports.everySeries = _everySeries2.default;
+exports.filter = _filter2.default;
+exports.filterLimit = _filterLimit2.default;
+exports.filterSeries = _filterSeries2.default;
+exports.forever = _forever2.default;
+exports.groupBy = _groupBy2.default;
+exports.groupByLimit = _groupByLimit2.default;
+exports.groupBySeries = _groupBySeries2.default;
+exports.log = _log2.default;
+exports.map = _map2.default;
+exports.mapLimit = _mapLimit2.default;
+exports.mapSeries = _mapSeries2.default;
+exports.mapValues = _mapValues2.default;
+exports.mapValuesLimit = _mapValuesLimit2.default;
+exports.mapValuesSeries = _mapValuesSeries2.default;
+exports.memoize = _memoize2.default;
+exports.nextTick = _nextTick2.default;
+exports.parallel = _parallel2.default;
+exports.parallelLimit = _parallelLimit2.default;
+exports.priorityQueue = _priorityQueue2.default;
+exports.queue = _queue2.default;
+exports.race = _race2.default;
+exports.reduce = _reduce2.default;
+exports.reduceRight = _reduceRight2.default;
+exports.reflect = _reflect2.default;
+exports.reflectAll = _reflectAll2.default;
+exports.reject = _reject2.default;
+exports.rejectLimit = _rejectLimit2.default;
+exports.rejectSeries = _rejectSeries2.default;
+exports.retry = _retry2.default;
+exports.retryable = _retryable2.default;
+exports.seq = _seq2.default;
+exports.series = _series2.default;
+exports.setImmediate = _setImmediate2.default;
+exports.some = _some2.default;
+exports.someLimit = _someLimit2.default;
+exports.someSeries = _someSeries2.default;
+exports.sortBy = _sortBy2.default;
+exports.timeout = _timeout2.default;
+exports.times = _times2.default;
+exports.timesLimit = _timesLimit2.default;
+exports.timesSeries = _timesSeries2.default;
+exports.transform = _transform2.default;
+exports.tryEach = _tryEach2.default;
+exports.unmemoize = _unmemoize2.default;
+exports.until = _until2.default;
+exports.waterfall = _waterfall2.default;
+exports.whilst = _whilst2.default;
+exports.all = _every2.default;
+exports.allLimit = _everyLimit2.default;
+exports.allSeries = _everySeries2.default;
+exports.any = _some2.default;
+exports.anyLimit = _someLimit2.default;
+exports.anySeries = _someSeries2.default;
+exports.find = _detect2.default;
+exports.findLimit = _detectLimit2.default;
+exports.findSeries = _detectSeries2.default;
+exports.flatMap = _concat2.default;
+exports.flatMapLimit = _concatLimit2.default;
+exports.flatMapSeries = _concatSeries2.default;
+exports.forEach = _each2.default;
+exports.forEachSeries = _eachSeries2.default;
+exports.forEachLimit = _eachLimit2.default;
+exports.forEachOf = _eachOf2.default;
+exports.forEachOfSeries = _eachOfSeries2.default;
+exports.forEachOfLimit = _eachOfLimit2.default;
+exports.inject = _reduce2.default;
+exports.foldl = _reduce2.default;
+exports.foldr = _reduceRight2.default;
+exports.select = _filter2.default;
+exports.selectLimit = _filterLimit2.default;
+exports.selectSeries = _filterSeries2.default;
+exports.wrapSync = _asyncify2.default;
+exports.during = _whilst2.default;
+exports.doDuring = _doWhilst2.default;
