@@ -1,34 +1,36 @@
-# triple-beam
+# Installation
+> `npm install --save @types/triple-beam`
 
-Definitions of levels for logging purposes & shareable Symbol constants.
+# Summary
+This package contains type definitions for triple-beam (https://github.com/winstonjs/triple-beam).
 
-## Usage
+# Details
+Files were exported from https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/triple-beam.
+## [index.d.ts](https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/triple-beam/index.d.ts)
+````ts
+export as namespace TripleBeam;
 
-``` js
-const { LEVEL } = require('triple-beam');
-const colors = require('colors/safe');
+export const LEVEL: unique symbol;
+export const MESSAGE: unique symbol;
+export const SPLAT: unique symbol;
+export const configs: Configs;
 
-const info = {
-  [LEVEL]: 'error',
-  level: 'error',
-  message: 'hey a logging message!'
-};
+export interface Config {
+    readonly levels: { [k: string]: number };
+    readonly colors: { [k: string]: string };
+}
 
-// Colorize your log level!
-info.level = colors.green(info.level);
+export interface Configs {
+    readonly cli: Config;
+    readonly npm: Config;
+    readonly syslog: Config;
+}
 
-// And still have an unmutated copy of your level!
-console.log(info.level === 'error');  // false
-console.log(info[LEVEL] === 'error'); // true
-```
+````
 
-## Tests
+### Additional Details
+ * Last updated: Tue, 07 Nov 2023 15:11:36 GMT
+ * Dependencies: none
 
-Tests are written with `mocha`, `assume`, and `nyc`. They can be run with `npm`:
-
-```
-npm test
-```
-
-##### LICENSE: MIT
-##### AUTHOR: [Charlie Robbins](https://github.com/indexzero)
+# Credits
+These definitions were written by [Daniel Byrne](https://github.com/danwbyrne).
