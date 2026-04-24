@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html lang="ru">
+
+
 <head>
+  <header>
+    <img src="imag/космос.jpeg" alt="UniVersePRO Logo" width="120">
+  </header>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UniVerse Pro - Поиск Университетов</title>
+  <title>UniVerse - Поиск Университетов</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    
     :root {
       --primary: #062abb;
       --secondary: #ff6b6b;
@@ -1039,7 +1046,7 @@
 <nav class="navbar">
   <div class="logo">
     <i class="fas fa-graduation-cap"></i>
-    UniVerse Pro
+    UniVerse 
   </div>
   <div class="nav-center">
     <button class="nav-btn" onclick="goHome()">
@@ -1055,7 +1062,7 @@
       <i class="fas fa-info-circle"></i> О нас
     </button>
     <button class="nav-btn" onclick="window.location.href='AI.html'">
-      <i class="fas fa-robot"></i> AI-Гид
+      <i class="fas fa-robot"></i> UniVerse-Гит
     </button>
   </div>
   <div class="nav-right">
@@ -1315,10 +1322,7 @@
   </div>
 </div>
 
-<button class="ai-guide-launcher" id="aiGuideLauncher" type="button">
-  <i class="fas fa-robot"></i>
-  ИИ-гид
-</button>
+
 
 <section class="ai-guide-panel" id="aiGuidePanel" aria-label="ИИ-гид FindU2">
   <div class="ai-guide-header">
@@ -1622,32 +1626,121 @@ const universitiesData = [
   {id: 36, name: "МТГУ", country: "Казахстан", city: "Алматы", desc: "Международный транспортно-гуманитарный университет", img: "https://avatars.mds.yandex.net/get-altay/13265642/2a00000195a0621889f99b3c8bd2b73cda47/M_height", link: "univer/kazakhstan/Almaty/MTGU.html", rating: 4.7, programs: "", language: "", tuition: ""},
   {id: 37, name: "МИТУ", country: "Казахстан", city: "Алматы", desc: "Международный инженерно-технологический университет", img: "https://ais.kazetu.kz/documents/storage/16/1738234431_1.png", link: "univer/kazakhstan/Almaty/METU.html", rating: 4.7, programs: "", language: "", tuition: ""},
   {id: 38, name: "МОК", country: "Казахстан", city: "Алматы", desc: "Международная образовательная корпорация", img: "https://admin.vipusknik.kz/storage/5180/snimokpng.png", link: "univer/kazakhstan/Almaty/MOK.html", rating: 4.7, programs: "", language: "", tuition: ""},
-  {id: 39, name: "Каспийский университет", country: "Казахстан", city: "Алматы", desc: "Каспийский университет", img: "", link: "univer/kazakhstan/Almaty/Kaspi.html", rating: 4.7, programs: "", language: "", tuition: ""},
-  {id: 40, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
-  {id: 41, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
-  {id: 42, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
-  {id: 43, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
-  {id: 44, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
-  {id: 45, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
-  {id: 46, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
-  {id: 47, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
-  {id: 48, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
-  {id: 49, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
-  {id: 50, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
-  {id: 51, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
-  {id: 52, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
-  {id: 53, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
-  {id: 54, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
-  {id: 55, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
-  {id: 56, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
-  {id: 57, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
-  {id: 58, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
-  {id: 59, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
-  {id: 60, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+
+
+
+
+  //Не готовые университеты
+  {id: 39, name: "Каспийский университет", country: "Казахстан", city: "Алматы", desc: "Каспийский университет", img: "https://avatars.mds.yandex.net/get-altay/5538812/2a000001879c5a84eb46a738ccb98f66d920/L_height", link: "univer/kazakhstan/Almaty/Kaspi.html", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 40, name: "КРМУ", country: "Казахстан", city: "Алматы", desc: "Казахстанско-Российский медицинский университет", img: "https://kolledj.kz/wp-content/uploads/2021/03/Kazakstansko-Rossijskij-Vysshij-meditsinskij-kolledzh-KRVMK.jpg", link: "univer/kazakhstan/Almaty/KRMU.html", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 41, name: "КНУ", country: "Казахстан", city: "Алматы", desc: "Казахстанско-Немецкий университет", img: "https://avatars.mds.yandex.net/i?id=a0abcb7f09a06ccade7aff563297b747e43edb25-12991230-images-thumbs&n=13", link: "univer/kazakhstan/Almaty/KNU.html", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 42, name: "КБТУ", country: "Казахстан", city: "Алматы", desc: "Казахстанско-Британский технический университет", img: "https://avatars.mds.yandex.net/get-altay/11373142/2a000001907d3f2826abad9844c4e834ae5f/L_height", link: "univer/kazakhstan/Almaty/KBTU.html", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 43, name: "ВШОЗ", country: "Казахстан", city: "Алматы", desc: "Казахстанский медицинский университет «ВШОЗ»", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQItsy1DJ4MlHMawxIAwlLRguvewAk5szNHfA&s", link: "univer/kazakhstan/Almaty/WSHOZ.html", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 44, name: "КУПС", country: "Казахстан", city: "Алматы", desc: "Казахский университет путей сообщений", img: "https://wikicity.kz/fotos_ms/Company_611_wNO9AMS7Rmnv3jvzDchrQKPI.gif", link: "univer/kazakhstan/Almaty/KUPS.html", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 45, name: "КазУМОиМЯ", country: "Казахстан", city: "Алматы", desc: "Казахский университет международных отношений и мировых языков имени Абылай хана", img: "https://testing.kz/images/universites/48/dbf8959330942cc5919771bd3414f43f.jpg", link: "univer/kazakhstan/Almaty/KazUMO.html", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 46, name: "AITU", country: "Казахстан", city: "Астана", desc: "Astana IT University", img: "https://tengrinews.kz/userdata/news/2021/news_443753/thumb_m/photo_368541.jpeg", link: "univer/kazakhstan/Astana/AITU.html", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 47, name: "EsU", country: "Казахстан", city: "Астана", desc: "Esil University", img: "https://the-tech.kz/wp-content/uploads/2023/11/photo_5453881070714995654_x-2.jpg", link: "univer/kazakhstan/Astana/EsU.html", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 48, name: "АГУ", country: "Казахстан", city: "Астана", desc: "Академия государственного управления при президенте РК", img: "https://www.gov.kz/uploads/2025/4/17/d76769dd12c74234a043c2c8585e9b46_original.120625.jpeg", link: "univer/kazakhstan/Astana/AGU.html", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 49, name: "АФКМС", country: "Казахстан", city: "Астана", desc: "Академия физической культуры и массового спорта", img: "https://tengrinews.kz/userdata/news/2022/news_471710/thumb_m/photo_399842.jpeg", link: "univer/kazakhstan/Astana/AFKMS.html", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 50, name: "ЕАГИ", country: "Казахстан", city: "Астана", desc: "Евразийский гуманитарный институт имени А.К. Кусаинова", img: "https://avatars.mds.yandex.net/get-altay/7979184/2a00000186f698875dc7a5aee784a1bac558/orig", link: "univer/kazakhstan/Astana/EAGI.html", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 51, name: "КНАХ", country: "Казахстан", city: "Астана", desc: "Казахская национальная академия хореографии", img: "https://admin.vipusknik.kz/storage/910/khoreogjpg.jpeg", link: "univer/kazakhstan/Astana/KNAH.html", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 52, name: "КАТУ", country: "Казахстан", city: "Астана", desc: "Казахский агротехнический университет имени С.Сейфуллина", img: "https://agun.kz/wp-content/uploads/2016/12/main.jpg", link: "univer/kazakhstan/Astana/KATU.html", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 53, name: "КазНУИ", country: "Казахстан", city: "Астана", desc: "Казахский национальный университет искусств", img: "https://sxodim.com/uploads/posts/2023/03/03/optimized/991541138cf3dbdce248888a3502217e_1400x790-q-85.jpg", link: "univer/kazakhstan/Astana/KazNUI.html", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 54, name: "КазУТБ", country: "Казахстан", city: "Астана", desc: "Казахский университет технологии и бизнеса имени К. Кулажанова", img: "https://www.qutb.edu.kz/storage/app/media/Galerey/666666666666.png", link: "univer/kazakhstan/Astana/KazUTB.html", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 55, name: "МУА", country: "Казахстан", city: "Астана", desc: "Медицинский университет Астана", img: "https://amu.edu.kz/upload/iblock/7e0/7e0cf6496e67035b11f6ac4a29014295.png", link: "univer/kazakhstan/Astana/MUA.html", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 56, name: "AIU", country: "Казахстан", city: "Астана", desc: "Astana International University", img: "https://admin.vipusknik.kz/storage/3148/1h7a7865-1-minjpg.jpeg", link: "univer/kazakhstan/Astana/AIU.html", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 57, name: "NU", country: "Казахстан", city: "Астана", desc: "Назарбаев Университет", img: "https://vlast.kz/media/pages/8z/17103992352mfah_1600x900.jpg", link: "univer/kazakhstan/Astana/NU.html", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 58, name: "Туран-Астана", country: "Казахстан", city: "Астана", desc: "Университет «Туран-Астана»", img: "https://avatars.mds.yandex.net/i?id=81547ce95ccb13fed9a87a71c1b95de368d221fc-8313048-images-thumbs&n=13", link: "univer/kazakhstan/Astana/Turan-Astana.html", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 59, name: "КАЗГЮУ", country: "Казахстан", city: "Астана", desc: "Университет КАЗГЮУ имени М.С. Нарикбаева", img: "https://admin.vipusknik.kz/storage/3776/snimok-2png.png", link: "univer/kazakhstan/Astana/KazGUI.html", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 60, name: "Финансовая академия", country: "Казахстан", city: "Астана", desc: "Финансовая академия", img: "https://avatars.mds.yandex.net/get-altay/4257799/2a000001794af425661bb245ce67905f0eae/L_height", link: "univer/kazakhstan/Astana/Finance.html", rating: 4.7, programs: "", language: "", tuition: ""},
   {id: 61, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
   {id: 62, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
   {id: 63, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
   {id: 64, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 65, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 66, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 67, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 68, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 69, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 70, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 71, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 72, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 73, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 74, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 75, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 76, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 77, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 78, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 79, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 80, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 81, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 82, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 83, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 84, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 85, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 86, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 87, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 88, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 89, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 90, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 91, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 92, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 93, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 94, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 95, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 96, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 97, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 98, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 99, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 100, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 101, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 102, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 103, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 104, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 105, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 106, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 107, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 108, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 109, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 110, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 111, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 112, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 113, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 114, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 115, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 116, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 117, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 118, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 119, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 120, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 121, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 122, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 123, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 124, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 125, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 126, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 127, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 128, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 129, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 130, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 131, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 132, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 133, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 134, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 135, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 136, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 137, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 138, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 139, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 140, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 141, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 142, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 143, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 144, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 145, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 146, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 147, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
+  {id: 148, name: "", country: "", city: "", desc: "", img: "", link: "", rating: 4.7, programs: "", language: "", tuition: ""},
 
 ].map(university => ({
   ...university,
@@ -1655,13 +1748,8 @@ const universitiesData = [
   pageSummary: 'Загружаем детали...',
   detailsLoaded: false
 })).filter((university) => {
-  return Boolean(
-    university.name &&
-    university.country &&
-    university.city &&
-    university.desc &&
-    university.link
-  );
+  // Keep every real university card visible even if some fields are not filled yet.
+  return Boolean(university.name);
 }).map((university) => {
   const inferred = inferTaxonomyValues(university);
   const facultyList = (Array.isArray(university.faculties) ? university.faculties : [])
@@ -1691,6 +1779,8 @@ let searchDebounceTimer = null;
 let aiGuideIsOpen = false;
 let aiGuideIsSending = false;
 const aiGuideHistory = [];
+let aiGuideRemoteEnabled = window.location.protocol !== 'file:';
+let aiGuideLocalNoticeShown = false;
 
 function aiGuideSetStatus(text) {
   const status = document.getElementById('aiGuideStatus');
@@ -1740,6 +1830,55 @@ function getAiGuidePayloadHistory() {
   return aiGuideHistory.slice(-AI_GUIDE_HISTORY_LIMIT);
 }
 
+function getAiGuideLocalReply(prompt) {
+  const text = String(prompt || '').trim().toLowerCase();
+  const top = filteredData.slice(0, 5);
+
+  if (!text) {
+    return 'Напишите вопрос про выбор вуза, документы или стратегию поступления.';
+  }
+
+  if (text.includes('привет') || text.includes('hello') || text.includes('hi')) {
+    return 'Привет! Я работаю в автономном режиме и могу помочь с выбором вуза, документами и стратегией поступления.';
+  }
+
+  if (text.includes('документ') || text.includes('справк') || text.includes('что нужно')) {
+    return [
+      'Базовый набор документов для поступления:',
+      '1. Удостоверение личности/паспорт',
+      '2. Аттестат или диплом с приложением',
+      '3. Сертификат ЕНТ/вступительных экзаменов (если требуется)',
+      '4. Фото 3x4 и медицинская справка',
+      '',
+      'Точный список всегда уточняйте на сайте выбранного университета.'
+    ].join('\n');
+  }
+
+  if (text.includes('подбери') || text.includes('выбери') || text.includes('какой вуз') || text.includes('какой университет')) {
+    if (!top.length) {
+      return 'Сначала укажите фильтры (страна, город, язык, бюджет), и я подберу варианты по текущему списку.';
+    }
+
+    const picks = top.map((u, idx) => `${idx + 1}. ${u.name} (${u.city}, ${u.country})`).join('\n');
+    return [
+      'С учетом текущих фильтров рекомендую эти варианты:',
+      picks,
+      '',
+      'Напишите, что для вас важнее: бюджет, рейтинг, язык обучения или общежитие.'
+    ].join('\n');
+  }
+
+  if (text.includes('бюджет') || text.includes('стоимост') || text.includes('цена') || text.includes('грант')) {
+    return 'Для оценки бюджета сначала задайте фильтр стоимости, потом сравним топ-варианты и выберем оптимальные по цене и качеству.';
+  }
+
+  return [
+    'Сейчас активен автономный режим AI-гида (без серверного API).',
+    'Я могу помочь по выбору вуза, документам и плану поступления на основе текущих фильтров.',
+    'Уточните: страна/город, направление и ваш бюджет.'
+  ].join('\n');
+}
+
 async function aiGuideSendMessage(rawPrompt) {
   const input = document.getElementById('aiGuideInput');
   const sendBtn = document.getElementById('aiGuideSend');
@@ -1761,40 +1900,49 @@ async function aiGuideSendMessage(rawPrompt) {
   aiGuideHistory.push({ role: 'user', content: prompt });
 
   try {
-    const response = await fetch('/api/ai-guide/chat', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        message: prompt,
-        context: collectAiGuideContext(),
-        history: getAiGuidePayloadHistory(),
-      }),
-    });
+    if (aiGuideRemoteEnabled) {
+      const response = await fetch('/api/ai-guide/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: prompt,
+          context: collectAiGuideContext(),
+          history: getAiGuidePayloadHistory(),
+        }),
+      });
 
-    const data = await response.json().catch(() => ({}));
+      const data = await response.json().catch(() => ({}));
 
-    if (!response.ok) {
-      const message = data?.error || 'Ошибка при обращении к ИИ-гиду';
-      aiGuideAddMessage('assistant', `Не получилось ответить: ${message}.`);
-      aiGuideSetStatus('Ошибка ответа, попробуйте снова');
-      return;
+      if (!response.ok) {
+        throw new Error(data?.error || 'Ошибка при обращении к ИИ-гиду');
+      }
+
+      const reply = String(data?.reply || '').trim();
+      if (!reply) {
+        throw new Error('Пустой ответ сервера');
+      }
+
+      aiGuideAddMessage('assistant', reply);
+      aiGuideHistory.push({ role: 'assistant', content: reply });
+      aiGuideSetStatus('Готов к следующему вопросу');
+    } else {
+      const localReply = getAiGuideLocalReply(prompt);
+      aiGuideAddMessage('assistant', localReply);
+      aiGuideHistory.push({ role: 'assistant', content: localReply });
+      aiGuideSetStatus('Автономный режим (без сервера)');
     }
-
-    const reply = String(data?.reply || '').trim();
-    if (!reply) {
-      aiGuideAddMessage('assistant', 'Ответ пустой. Попробуйте переформулировать вопрос.');
-      aiGuideSetStatus('Пустой ответ');
-      return;
-    }
-
-    aiGuideAddMessage('assistant', reply);
-    aiGuideHistory.push({ role: 'assistant', content: reply });
-    aiGuideSetStatus('Готов к следующему вопросу');
   } catch (error) {
-    aiGuideAddMessage('assistant', 'Сейчас не удается связаться с сервером. Проверьте, запущен ли backend.');
-    aiGuideSetStatus('Нет связи с сервером');
+    aiGuideRemoteEnabled = false;
+    if (!aiGuideLocalNoticeShown) {
+      aiGuideLocalNoticeShown = true;
+      aiGuideAddMessage('assistant', 'Серверный AI недоступен, переключаюсь в автономный режим для Go Live.');
+    }
+    const localReply = getAiGuideLocalReply(prompt);
+    aiGuideAddMessage('assistant', localReply);
+    aiGuideHistory.push({ role: 'assistant', content: localReply });
+    aiGuideSetStatus('Автономный режим (без сервера)');
   } finally {
     aiGuideIsSending = false;
     if (sendBtn) sendBtn.disabled = false;
@@ -2240,12 +2388,8 @@ function renderUniversities() {
     return;
   }
 
-  const loadedDetailsCount = filteredData.filter(u => u.detailsLoaded).length;
   const totalVisible = filteredData.length;
-  const loadingSuffix = loadedDetailsCount < totalVisible
-    ? ` • ⏳ Детали: ${loadedDetailsCount}/${totalVisible}`
-    : ` • ✅ Детали загружены`;
-  document.getElementById('resultsInfo').textContent = `📊 Результаты: ${totalVisible} университет(ов)${loadingSuffix}`;
+  document.getElementById('resultsInfo').textContent = `📊 Результаты: ${totalVisible} университет(ов)`;
 
   container.innerHTML = `
     <div class="universities-grid">
@@ -2257,7 +2401,7 @@ function renderUniversities() {
           <div class="card-content">
             <h3 class="card-title">${escapeHtml(u.name)}</h3>
             <div class="card-location">
-              <i class="fas fa-map-marker-alt"></i> ${escapeHtml(u.city)}, ${escapeHtml(u.country)}
+              <i class="fas fa-map-marker-alt"></i> ${escapeHtml(u.city || 'Город не указан')}, ${escapeHtml(u.country || 'Страна не указана')}
             </div>
             <p class="card-desc">${escapeHtml(u.desc)}</p>
             <p class="card-detail ${u.detailsLoaded ? '' : 'loading'}">
@@ -2283,8 +2427,8 @@ function renderUniversities() {
               </div>
             </div>
             <div class="card-actions">
-              <button class="card-btn btn-view" onclick="goToUniversity('${u.link}')">
-                <i class="fas fa-arrow-right"></i> Подробнее
+              <button class="card-btn btn-view" onclick="goToUniversity('${u.link || ''}')" ${u.link ? '' : 'disabled'}>
+                <i class="fas ${u.link ? 'fa-arrow-right' : 'fa-ban'}"></i> ${u.link ? 'Подробнее' : 'Ссылка скоро'}
               </button>
               <button class="card-btn btn-favorite ${favorites.includes(u.id) ? 'favorited' : ''}" 
                       onclick="toggleFavorite(${u.id})">
