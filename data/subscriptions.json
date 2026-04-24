@@ -1,0 +1,31 @@
+{
+  "users": {
+    "guest:client_1776787703378_dewnvzxjrbq": {
+      "email": "",
+      "subscriptions": {
+        "univer/UST/mit1": {
+          "active": true,
+          "amountUsd": 1,
+          "grantedAt": "2026-04-21T16:08:35.856Z",
+          "provider": "stripe",
+          "paymentFlow": "card",
+          "visaType": "us",
+          "paymentIntentId": "pi_3TOgqa2MDSErEzme11dxFX9D"
+        }
+      }
+    }
+  },
+  "payments": [
+    {
+      "userId": "guest:client_1776787703378_dewnvzxjrbq",
+      "email": "",
+      "universityId": "univer/UST/mit1",
+      "amountUsd": 1,
+      "paidAt": "2026-04-21T16:08:35.856Z",
+      "provider": "stripe",
+      "paymentFlow": "card",
+      "visaType": "us",
+      "paymentIntentId": "pi_3TOgqa2MDSErEzme11dxFX9D"
+    }
+  ]
+}
