@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Servers</title>
+    <script type="text/javascript">
+        window.onload = function() {
+            const ports = [8000, 8001, 8002, 8003];
+            ports.forEach(port => {
+                window.open(`http://localhost:${port}/index2.html`, '_blank');
+            });
+        };
+    </script>
+</head>
+<body>
+    <h1>Opening Servers...</h1>
+    <p>This page will open the servers running on ports 8000, 8001, 8002, and 8003.</p>
+</body>
+</html>
